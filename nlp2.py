@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import nltk
 from nltk import tokenize
-from nltk import pos_tag
-from nltk import RegexpParser
 import re
+import requests
 
 COOKING_METHODS = ['boil', 'bake', 'fry', 'broil', 'steam', 'roast', 'airfry', 'cook', 'freeze', 'melt', 'saute', 'sauté', 'grill', 'melt', 'stirring', 'pour', 'dice', 'mince', 'heat', 'keep warm', 'reduce heat'] # two word instructions ??
 INGREDIENTS = ['tomatoes', 'pasta', 'oil', 'garlic', 'tomato paste', 'salt', 'pepper', 'basil', 'cheese', 'water']
@@ -13,15 +13,13 @@ TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
 VERB_TO_TOOL = {'drain':['colander'],'simmer':['pan'],'peel':['peeler','knife'],'boil':['pot'],'bake':['oven'],'airfry':['airfryer'],'saute':['spatula','pan'],'sauté':['spatula','pan'],'cut':['knife'],'chop':['knife'],'stir':['spatula','wooden spoon'],'mix':['spatula','wooden spoon']}
 
 class Recipe:
-    def __init__(self, name, ingredients, nutrition, steps):
+    def __init__(self, name, ingredientslist, nutrition, steps, ingredients, index):
         self.name = name
+        self.ingredientlist = ingredientslist
         self.ingredients = ingredients
         self.nutrition = nutrition
         self.steps = steps
         self.index = 0
-
-    def __str__(self):
-        return f"{self.name} Recipe:\nIngredients: {self.ingredients}\nNutritional Information: {self.nutrition}\nSteps: {self.steps}"
 
     def organizeInfo(self, text):
         self.name = text[0]
@@ -36,10 +34,10 @@ class Recipe:
             if 'Nutrition Facts' in t:
                 if ind != nutind:
                     nutind2 = ind
-
+        
         curr = text[ingind:dirind]
-        self.ingredients = curr[1:]
-        # turn this into a dictionary?^
+        self.ingredientlist = curr[1:]
+        self.ingredients = ingredientHelper(self.ingredientlist)
         self.steps = remove_short_words(text[dirind:nutind])
         curr1 = text[nutind2:]
         curr = curr1[1:-2]
@@ -52,12 +50,13 @@ class Recipe:
         self.nutrition = final
         self.index = 0
 
+
     def printinfo(self):
         print('Recipe name:', self.name)
         print()
         print('List of ingredients:')
         for i in self.ingredients:
-            print(i)
+            print(i,':',self.ingredients[i])
         print()
         print('Cooking steps:')
         for i in self.steps:
@@ -77,7 +76,7 @@ class Recipe:
                     temp = cooking_methods.get(i, set())
                     temp.add(word)
                     cooking_methods[i] = temp
-                if word in INGREDIENTS:
+                if word in self.ingredients:
                     temp = ingredients.get(i, set())
                     temp.add(word)
                     ingredients[i] = temp
@@ -93,8 +92,6 @@ class Recipe:
 
 
         return cooking_methods, ingredients, tools
-
-
 
 def remove_short_words(list_of_strings):
     return [string for string in list_of_strings if len(string.split()) > 3]
@@ -126,21 +123,95 @@ def scrape(url_input):
     new_text = re.sub(r'\s{3,}', '. ', new_text)
     new_text = re.sub(r'\.{2,}', '.', new_text)
 
+
     out = tokenize.sent_tokenize(new_text)
     for i,k in enumerate(out):
         k = k.replace('\n',' ')
-        out[i] = re.sub('\.','', k)
+        pattern = re.compile(r'\d+\.\d+.*')
+        if not pattern.match(k):
+            out[i] = re.sub('\.','', k)
     output = out[1:]
-   #print(output)
     return output
+
+def ingredientHelper(lststr):
+    outdict = {}
+    string_to_tag = lststr
+    for i in string_to_tag:
+        if ',' in i:
+            temp = i.split(',')
+            t1 = tokenize.word_tokenize(temp[0])
+            t = nltk.pos_tag(t1)
+            word = t[-1]
+            if not 'JJ' in word[1]:
+                i = temp[0]
+        
+        if ' - ' in i:
+            i = i.split(' - ')[0]
+
+        if not i.isascii():
+            pattern = re.compile(r'([\u00BC-\u00BE\u2150-\u215E])')
+            i = pattern.sub(lambda x: str({
+            '\u00BC': 0.25,
+            '\u00BD': 0.5,
+            '\u00BE': 0.75,
+            '\u2152': 0.1,
+            '\u2153': 0.33,
+            '\u2154': 0.67,
+            '\u2155': 0.2,
+            '\u2156': 0.4,
+            '\u2157': 0.6,
+            '\u2158': 0.8,
+            '\u215B': 0.125,}.get(x.group(), x.group())), i)
+        
+        pattern1 = re.compile(r'\d+\s\((.*)\) \w+ (.*)') #parentheses in ingredient
+        pattern2 = re.compile(r'(\d+)  (.*)') #double space
+        pattern3 = re.compile(r'(.*) (to\staste)') #to taste
+        pattern4 = re.compile(r'(\d+ \w+) (.*)') #normal format
+        pattern5 = re.compile(r'(\d+\.\d+ \w+) (.*)') #decimal
+        pattern6 = re.compile(r'(\d+)\s(\d+)\.(\d+) \w+ (.*)') #number and decimal fix then use pattern 5
+        match1 = pattern1.match(i)
+        match2 = pattern2.match(i)
+        match3 = pattern3.match(i)
+        match4 = pattern4.match(i)
+        match5 = pattern5.match(i)
+        match6 = pattern6.match(i)
+        if match1:
+            newpat = re.compile(r'.*\((.*)\).*')
+            print(newpat.match(i)[0])
+            outdict[match1.group(2)] = match1.group(1)
+        elif match2:
+            outdict[match2.group(2)] = match2.group(1)
+        elif match3:
+            item = match3.group(1)
+            q = match3.group(2)
+            splstr = item.split(' and ')
+            if len(splstr)>=2:
+                item1 = splstr[0]
+                item2 = splstr[1]
+                outdict[item1] = q
+                outdict[item2] = q
+            else:
+                outdict[item] = q
+        elif match4:
+            outdict[match4.group(2)] = match4.group(1)
+        elif match5:
+            outdict[match5.group(2)] = match5.group(1)
+        elif match6:
+            parts = i.split()
+            # Convert the first two parts to floats and add them together
+            total = float(parts[0]) + float(parts[1])
+            # Combine the total with the rest of the string
+            i = f"{total} {' '.join(parts[2:])}"
+            newmatch = pattern5.match(i)
+            outdict[newmatch.group(2)] = newmatch.group(1) 
+    return outdict
 
 def generate_recipe(url):
     r = Recipe
     text = scrape(url) #https://www.allrecipes.com/recipe/11691/tomato-and-garlic-pasta/
+    #https://www.allrecipes.com/recipe/16354/easy-meatloaf/
     Recipe.organizeInfo(r, text)
     return r
-
-
 
 def bot():
     url = input('Enter the link to the recipe: ')
