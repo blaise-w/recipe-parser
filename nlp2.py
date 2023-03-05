@@ -80,10 +80,6 @@ class Recipe:
                     temp = cooking_methods.get(i, set())
                     temp.add(word)
                     cooking_methods[i] = temp
-                # if word in self.ingredients:
-                #     temp = ingredients.get(i, set())
-                #     temp.add(word)
-                #     ingredients[i] = temp
                 if word in TOOLS: # deal with "skillet or pan" just including both in list rn
                     temp = tools.get(i, set())
                     temp.add(word)
@@ -237,26 +233,37 @@ def generate_google(command):
         link = link + "+" + str(word)
     print("This link should help: " + link)
 
-def stepbot(rec):
+def remy(rec):
     r = rec
     cooking_methods, ingredients, tools = r.parse_steps(r)
-
     while r.index < len(r.steps) - 1:
         print(r.steps[r.index])
         command = input().lower()
-        if ("show" in command and "ingredient" in command) or command == '1':
+        if command == "quit" or command == "q" or command =='done' or command == 'exit':
+            return
+        elif ("show" in command and "ingredient" in command) or command == '1':
             printingredients(r)
             print('What would you like to do now?')
             continue
-        if command == "next" or command ==  "":
+        elif "repeat" in command:
+            continue
+        elif  "next" in command or command ==  "":
             r.index += 1
-        elif command == "last" or command == "back":
-            if r.index != 0:
+        elif "last" in command or "back" in command or "previous" in command:
+            if r.index == 0:
+                print('You are at the first step')
+            else:
                 r.index -=1
+        elif ("step" in command and ("go" in command or "jump" in command or "skip" in command) and "to" in command):
+            pattern = re.compile(r'.*(\d+).*')
+            mat = pattern.match(command)
+            n = int(mat.group(1))
+            if n>=len(r.steps):
+                print('This is not a valid step number')
+            else:
+                r.index = n
         elif command == "what":
             pass
-        elif command == "quit" or command == "q":
-            return
         elif command == "do what": # can generalize these to checking in a list of similar possible inputs
             print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, [r.steps[r.index]]))))
             continue
@@ -288,7 +295,7 @@ def stepbot(rec):
 
     print("Bon Apetit! :)")
 
-def bot():
+def RecipeDaddy():
     url = input('Hi! Please enter the URL of the recipe you would like help with: ')
     r = generate_recipe(url)
     print('Looks like we are making',r.name)
@@ -305,11 +312,11 @@ def bot():
             c = input()
             if c == 'y':
                 valid = False
-                stepbot(r)
+                remy(r)
 
         elif choice == '2':
             valid = False
-            stepbot(r)
+            remy(r)
         else:
             print('Hmm I do not understand what you want me to do')
     
@@ -352,5 +359,5 @@ def printingredients(r):
     print()
     print()
 
-bot()
+RecipeDaddy()
 
