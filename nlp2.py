@@ -226,6 +226,7 @@ def stepbot(rec):
     r = rec
     #Recipe.printinfo(r)
     #print("hey \n")
+    #commit smth new
     cooking_methods, ingredients, tools = r.parse_steps(r)
     print(r.steps[r.index])
 
