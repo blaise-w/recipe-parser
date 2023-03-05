@@ -238,16 +238,16 @@ def generate_google(command):
     print("This link should help: " + link)
 
 def stepbot(rec):
-    #url = input('Enter the link to the recipe: ')
     r = rec
-    #Recipe.printinfo(r)
-    #print("hey \n")
-    #commit smth new
     cooking_methods, ingredients, tools = r.parse_steps(r)
-    print(r.steps[r.index])
 
     while r.index < len(r.steps) - 1:
+        print(r.steps[r.index])
         command = input().lower()
+        if ("show" in command and "ingredient" in command) or command == '1':
+            printingredients(r)
+            print('What would you like to do now?')
+            continue
         if command == "next" or command ==  "":
             r.index += 1
         elif command == "last" or command == "back":
@@ -256,7 +256,7 @@ def stepbot(rec):
         elif command == "what":
             pass
         elif command == "quit" or command == "q":
-            break
+            return
         elif command == "do what": # can generalize these to checking in a list of similar possible inputs
             print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, [r.steps[r.index]]))))
             continue
@@ -283,8 +283,8 @@ def stepbot(rec):
                 link = link + "+" + str(word)
             print("This link should help: " + link)
 
-        print(r.steps[r.index])
-        print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
+        #print(r.steps[r.index])
+        #print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
 
     print("Bon Apetit! :)")
 
@@ -300,10 +300,7 @@ def bot():
             valid = False
             return
         elif choice == '1':
-            for i in r.ingredientlist:
-                print(i)
-            print()
-            print()
+            printingredients(r)
             print('Shall we go through the steps now? y/n')
             c = input()
             if c == 'y':
@@ -348,6 +345,12 @@ def get_methods(text):
         verblist.append(tokens[0])
     verblist = list(set(verblist))
     return verblist
+
+def printingredients(r):
+    for i in r.ingredientlist:
+        print(i)
+    print()
+    print()
 
 bot()
 
