@@ -290,27 +290,28 @@ def generate_youtube(command):
     link = "https://www.youtube.com/results?search_query="
     for word in command_words:
         link = link + "+" + str(word)
-    print("This link should help: " + link)
+    return "This link should help: " + link
 
 def generate_google(command):
     command_words = command.split(' ')
     link = "https://www.google.com/search?q="
     for word in command_words:
         link = link + "+" + str(word)
-    print("This link should help: " + link)
+    return "This link should help: " + link
 
 def generate_substitute(ingredient):
     if ingredient in SUBSTITIONS:
         for i in SUBSTITIONS[ingredient]:
             print(i)
     else:
-        generate_google('what is a substitute for ' + str(ingredient))
+        print(generate_google('what is a substitute for ' + str(ingredient)))
 
 def remy(rec):
     r = rec
     cooking_methods, ingredients, tools = r.parse_steps(r)
     while r.index < len(r.steps) - 1:
-        print(r.steps[r.index])
+        step = r.steps[r.index]
+        print(step)
         command = input().lower()
         if command == "quit" or command == "q" or command =='done' or command == 'exit':
             return
@@ -325,7 +326,7 @@ def remy(rec):
         elif "last" in command or "back" in command or "previous" in command:
             if r.index == 0:
                 print('You are at the first step')
-            else: 
+            else:
                 r.index -=1
         elif ("step" in command and ("go" in command or "jump" in command or "skip" in command) and "to" in command):
             pattern = re.compile(r'.*(\d+).*')
@@ -335,6 +336,14 @@ def remy(rec):
                 print('This is not a valid step number')
             else:
                 r.index = n
+        elif 'how' in command:
+            if 'much' in command:
+                for key, val in r.ingredients:
+                    if key in command:
+                        print(val,'of',key)
+                        continue
+            elif 'long' in command:
+                print(getTime(step))
         elif command == "what":
             pass
         elif command == "do what": # can generalize these to checking in a list of similar possible inputs
@@ -356,12 +365,13 @@ def remy(rec):
         elif command == "with what":
             print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
             continue
-        command_words = command.split(' ')
-        if command_words[0] == 'how':
-            link = "https://www.youtube.com/results?search_query="
-            for word in command_words:
-                link = link + "+" + str(word)
-            print("This link should help: " + link)
+        else:
+            command_words = command.split(' ')
+            if command_words[0] == 'how':
+                link = "https://www.youtube.com/results?search_query="
+                for word in command_words:
+                    link = link + "+" + str(word)
+                print("This link should help: " + link)
 
         #print(r.steps[r.index])
         #print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
@@ -369,7 +379,8 @@ def remy(rec):
     print("Bon Apetit! :)")
 
 def RecipeDaddy():
-    url = input('Hi! Please enter the URL of the recipe you would like help with: ')
+    print('Hi I\'m Recipe Daddy! :)')
+    url = input('Please enter the URL of the recipe you would like help with: ')
     r = generate_recipe(url)
     print('Looks like we are making',r.name)
     valid = True
@@ -431,6 +442,17 @@ def printingredients(r):
         print(i)
     print()
     print()
+
+def getTime(text1):
+    text = text1.lower()
+    pat = re.compile(r'.* (\d+) (minutes?|hours?|seconds?)')
+    mat = pat.match(text)
+    if mat:
+        out = str(mat.group(1)) +' '+ str(mat.group(2))
+    else:
+        print('it works')
+        out = generate_google('how long to '+str(text))
+    return out
 
 RecipeDaddy()
 
