@@ -346,10 +346,10 @@ def remy(rec):
                 print(getTime(step))
         elif command == "what":
             pass
-        elif command == "do what": # can generalize these to checking in a list of similar possible inputs
+        elif command == "do what":
             print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, [r.steps[r.index]]))))
             continue
-        elif command == "to what":
+        elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
             print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"])))) # only looks one step back. maybe keep as a variable instead
             continue
         elif command == "how much":
