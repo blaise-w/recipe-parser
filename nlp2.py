@@ -12,14 +12,17 @@ TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
 
 VERB_TO_TOOL = {'drain':['colander'],'simmer':['pan'],'peel':['peeler','knife'],'boil':['pot'],'bake':['oven'],'airfry':['airfryer'],'saute':['spatula','pan'],'sauté':['spatula','pan'],'cut':['knife'],'chop':['knife'],'stir':['spatula','wooden spoon'],'mix':['spatula','wooden spoon']}
 
+stopwords = ['making','is','do', 'be', 'c', 'f']
+
 class Recipe:
-    def __init__(self, name, ingredientslist, nutrition, steps, ingredients, index):
+    def __init__(self, name, ingredientslist, nutrition, steps, ingredients, index, cookingmethods):
         self.name = name
         self.ingredientlist = ingredientslist
         self.ingredients = ingredients
         self.nutrition = nutrition
         self.steps = steps
         self.index = 0
+        self.cookingmethods = cookingmethods
 
     def organizeInfo(self, text):
         self.name = text[0]
@@ -76,10 +79,10 @@ class Recipe:
                     temp = cooking_methods.get(i, set())
                     temp.add(word)
                     cooking_methods[i] = temp
-                if word in self.ingredients:
-                    temp = ingredients.get(i, set())
-                    temp.add(word)
-                    ingredients[i] = temp
+                # if word in self.ingredients:
+                #     temp = ingredients.get(i, set())
+                #     temp.add(word)
+                #     ingredients[i] = temp
                 if word in TOOLS: # deal with "skillet or pan" just including both in list rn
                     temp = tools.get(i, set())
                     temp.add(word)
@@ -89,6 +92,11 @@ class Recipe:
                     for tool in VERB_TO_TOOL[word]:
                         temp.add(tool)
                     tools[i] = temp
+            for ing in self.ingredients:
+                if ing in step:
+                    temp = ingredients.get(ing, set())
+                    temp.add(ing)
+                    ingredients[i] = temp
 
 
         return cooking_methods, ingredients, tools
@@ -122,6 +130,7 @@ def scrape(url_input):
     new_text = re.sub('Dotdash', '  ', new_text)
     new_text = re.sub(r'\s{3,}', '. ', new_text)
     new_text = re.sub(r'\.{2,}', '.', new_text)
+    new_text = re.sub(r';', '.', new_text)
 
 
     out = tokenize.sent_tokenize(new_text)
@@ -177,7 +186,6 @@ def ingredientHelper(lststr):
         match6 = pattern6.match(i)
         if match1:
             newpat = re.compile(r'.*\((.*)\).*')
-            print(newpat.match(i)[0])
             outdict[match1.group(2)] = match1.group(1)
         elif match2:
             outdict[match2.group(2)] = match2.group(1)
@@ -213,7 +221,7 @@ def generate_recipe(url):
     Recipe.organizeInfo(r, text)
     return r
 
-def bot():
+def bot2():
     url = input('Enter the link to the recipe: ')
     r = generate_recipe(url)
     #Recipe.printinfo(r)
@@ -253,9 +261,76 @@ def bot():
             continue
 
         print(r.steps[r.index])
+        print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
 
     print("Bon Apetit! :)")
 
+def bot():
+    url = input('Hi! Please enter the URL of the recipe you would like help with: ')
+    r = generate_recipe(url)
+    print('Looks like we are making',r.name)
+    valid = True
+    while valid:
+        print('Would you like to [1] go over the ingredients or [2] jump right into the cooking steps?')
+        choice = input()
+        if choice == 'exit' or choice == 'stop' or choice =='quit':
+            valid = False
+            return
+        elif choice == '1':
+            for i in r.ingredientlist:
+                print(i)
+            print()
+            print()
+            print('Shall we go through the steps now? y/n')
+            c = input()
+            if c == 'y':
+                valid = False
+                stepparser(r)
 
+        elif choice == '2':
+            valid = False
+            stepparser(r)
+        else:
+            print('Hmm I do not understand what you want me to do')
+
+def stepparser(r):
+    steps = r.steps
+    for step in steps:
+        print(step)
+        print(get_methods(step))
+    
+def get_methods(text):
+    verblist = []
+    tokens = tokenize.word_tokenize(text.lower())
+    tags = nltk.pos_tag(tokens)
+    pattern = re.compile(r'VB.?')
+    bad = re.compile(r'VBN|VBD')
+    for i, temp in enumerate(tags):
+        word = temp[0]
+        tag = temp[1]
+        if word not in stopwords:
+            if i == 0 and not pattern.match(tag):
+                notfound = True
+                for w,t in tags:
+                    if t == 'NN' and notfound and w not in stopwords:
+                        verblist.append(w)
+                        notfound = False
+            elif pattern.match(tag):
+                if bad.match(tag):
+                    continue
+                elif i+1 < len(tags):
+                    next = tags[i+1]
+                    if next[1] == 'NN' and next[0] not in stopwords:
+                        bigram = word + ' ' + next[0]
+                        verblist.append(bigram)
+                    else:
+                        verblist.append(word)
+                else:
+                    verblist.append(word)
+    if len(verblist) == 0:
+        verblist.append(tokens[0])
+    verblist = list(set(verblist))
+    return verblist
 
 bot()
+
