@@ -13,6 +13,72 @@ TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
 
 VERB_TO_TOOL = {'drain':['colander'],'simmer':['pan'],'peel':['peeler','knife'],'boil':['pot'],'bake':['oven'],'airfry':['airfryer'],'saute':['spatula','pan'],'sauté':['spatula','pan'],'cut':['knife'],'chop':['knife'],'stir':['spatula','wooden spoon'],'mix':['spatula','wooden spoon']}
 
+SUBSTITIONS = {
+    'allspice': ['cinnamon', 'nutmeg', 'clove'],
+    'baking powder': ['baking soda', 'cream of tartar', 'yeast'],
+    'basil': ['oregano', 'thyme'],
+    'bay leaves': ['thyme'],
+    'ground beef': ['ground turkey', 'ground chicken', 'ground pork'],
+    'brown sugar': ['white sugar', 'molasses', 'honey'],
+    'butter': ['margarine', 'shortening', 'oil'],
+    'cardamom': ['cinnamon', 'ginger'],
+    'carrots': ['sweet potatoes', 'parsnips'],
+    'cayenne pepper': ['red pepper flakes', 'paprika'],
+    'chicken': ['turkey', 'pork'],
+    'chili powder': ['paprika', 'cumin', 'garlic powder'],
+    'cinnamon': ['nutmeg', 'allspice', 'cardamom'],
+    'clove': ['allspice', 'nutmeg', 'cinnamon'],
+    'coconut milk': ['heavy cream', 'soy milk'],
+    'coriander': ['cumin', 'caraway'],
+    'cornstarch': ['flour', 'arrowroot'],
+    'cumin': ['coriander', 'chili powder'],
+    'curry powder': ['garam masala', 'cumin', 'coriander'],
+    'dill': ['fennel', 'tarragon'],
+    'eggs': ['silken tofu', 'applesauce', 'banana'],
+    'fish': ['tilapia', 'cod', 'halibut'],
+    'fish sauce': ['soy sauce', 'hoisin sauce'],
+    'garlic': ['shallot', 'onion', 'chives'],
+    'ginger': ['allspice', 'cinnamon', 'nutmeg'],
+    'ground pork': ['ground beef', 'ground turkey'],
+    'heavy cream': ['coconut milk', 'silken tofu'],
+    'honey': ['brown sugar', 'white sugar', 'maple syrup'],
+    'italian sausage': ['chorizo', 'andouille sausage'],
+    'lemon juice': ['lime juice', 'vinegar'],
+    'milk (regular)': ['soy milk', 'almond milk', 'coconut milk'],
+    'mustard (dry)': ['mustard (prepared)', 'wasabi'],
+    'nutmeg': ['allspice', 'cinnamon', 'ginger'],
+    'olive oil': ['canola oil', 'vegetable oil', 'coconut oil'],
+    'onion': ['shallot', 'garlic', 'chives'],
+    'paprika': ['cayenne pepper', 'chili powder'],
+    'parmesan cheese': ['pecorino romano', 'grana padano'],
+    'pasta': ['zucchini noodles', 'spaghetti squash'],
+    'pork': ['chicken', 'turkey'],
+    'potatoes': ['sweet potatoes', 'cauliflower'],
+    'red pepper flakes': ['cayenne pepper', 'chili powder'],
+    'rice': ['quinoa', 'couscous'],
+    'salmon': ['trout', 'mackerel', 'tuna'],
+    'sauce (tomato)': ['salsa', 'marinara sauce'],
+    'shallot': ['onion', 'garlic', 'chives'],
+    'shrimp': ['prawns', 'scallops', 'crab'],
+    'sour cream': ['Greek yogurt', 'creme fraiche'],
+    'soy sauce': ['fish sauce', 'tamari'],
+    'spinach': ['kale', 'arugula', 'collard greens'],
+    'sriracha': ['hot sauce', 'red pepper flakes'],
+    'sugar': ['brown sugar', 'honey', 'maple syrup'],
+    'brown sugar': ['sugar', 'honey', 'maple syrup'],
+    'thyme': ['oregano', 'rosemary', 'bay leaves'],
+    'tofu': ['tempeh', 'chicken', 'pork'],
+    'tomatoes': ['red bell pepper', 'canned tomatoes', 'salsa'],
+    'ground turkey': ['ground beed', 'ground chicken', 'ground pork'],
+    'turkey': ['chicken', 'pork'],
+    'vanilla extract': ['maple extract', 'almond extract'],
+    'vegetable oil': ['olive oil', 'canola oil', 'coconut oil'],
+    'vinegar': ['lemon juice', 'lime juice'],
+    'white wine': ['chicken or vegetable broth', 'white grape juice', 'ginger ale'],
+    'worcestershire sauce': ['soy sauce', 'oyster sauce', 'fish sauce'],
+    'yellow mustard': ['dijon mustard', 'whole grain mustard']
+}
+
 stopwords = ['making','is','do', 'be', 'c', 'f']
 
 class Recipe:
@@ -236,6 +302,12 @@ def generate_google(command):
     for word in command_words:
         link = link + "+" + str(word)
     print("This link should help: " + link)
+
+def generate_substitute(ingredient):
+    if ingredient in SUBSTITIONS:
+        for i in SUBSTITIONS[ingredient]:
+            print(i)
+    generate_google('what is a substitute for ' + str(ingredient))
 
 def stepbot(rec):
     r = rec
