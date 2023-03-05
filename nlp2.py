@@ -146,7 +146,7 @@ class Recipe:
                     temp = cooking_methods.get(i, set())
                     temp.add(word)
                     cooking_methods[i] = temp
-                if word in TOOLS: # deal with "skillet or pan" just including both in list rn
+                if word in TOOLS:
                     temp = tools.get(i, set())
                     temp.add(word)
                     tools[i] = temp
@@ -156,8 +156,9 @@ class Recipe:
                         temp.add(tool)
                     tools[i] = temp
             for ing in self.ingredients:
+                #print(ing)
                 if ing in step:
-                    temp = ingredients.get(ing, set())
+                    temp = ingredients.get(i, set())
                     temp.add(ing)
                     ingredients[i] = temp
 
@@ -362,6 +363,7 @@ def remy(rec):
                 continue
             elif 'ingredient' in command or 'using' in command or 'with' in command or 'to' in command:
                 print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, [generate_google(str(command)+ ' ' + str(step))]))))
+  
             elif 'use' in command:
                 print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
         elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
