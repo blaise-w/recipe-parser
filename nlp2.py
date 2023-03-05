@@ -383,9 +383,9 @@ def remy(rec):
         else:
             command_words = command.split(' ')
             if command_words[0] == 'how':
-                generate_youtube(command)
+                print(generate_youtube(command))
             elif command_words[0] == 'what' and command_words[1] == 'is':
-                generate_google(command)
+                print(generate_google(command))
 
 
         #print(r.steps[r.index])
