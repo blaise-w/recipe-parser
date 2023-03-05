@@ -13,6 +13,32 @@ TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
 
 VERB_TO_TOOL = {'drain':['colander'],'simmer':['pan'],'peel':['peeler','knife'],'boil':['pot'],'bake':['oven'],'airfry':['airfryer'],'saute':['spatula','pan'],'sauté':['spatula','pan'],'cut':['knife'],'chop':['knife'],'stir':['spatula','wooden spoon'],'mix':['spatula','wooden spoon']}
 
+GENERAL_INGREDIENTS = [
+    "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon",
+    "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh",
+    "onion", "garlic", "ginger", "carrot", "celery", "potato", "sweet potato",
+    "broccoli", "cauliflower", "spinach", "kale", "arugula", "lettuce",
+    "tomato", "cucumber", "bell pepper", "chili pepper", "mushroom",
+    "rice", "quinoa", "pasta", "bread", "flour", "sugar", "salt", "pepper",
+    "olive oil", "vegetable oil", "coconut oil", "sesame oil", "peanut oil",
+    "soy sauce", "teriyaki sauce", "fish sauce", "oyster sauce", "hoisin sauce",
+    "honey", "maple syrup", "agave syrup", "molasses", "brown sugar",
+    "mustard", "ketchup", "mayonnaise", "sour cream", "cream cheese", "butter",
+    "cheddar cheese", "parmesan cheese", "feta cheese", "mozzarella cheese",
+    "milk", "yogurt", "egg", "baking powder", "baking soda", "yeast",
+    "cumin", "coriander", "paprika", "cinnamon", "nutmeg", "cloves",
+    "chili powder", "curry powder", "garam masala", "turmeric", "bay leaves",
+    "thyme", "rosemary", "basil", "oregano", "parsley", "cilantro",
+    "lemon", "lime", "orange", "grapefruit", "apple", "banana", "avocado",
+    "pineapple", "mango", "peach", "pear", "plum", "coconut", "raisins",
+    "almonds", "cashews", "walnuts", "peanuts", "pistachios", "sunflower seeds",
+    "pumpkin seeds", "flaxseed", "chia seeds", "oats", "granola", "chocolate chips",
+    "cocoa powder", "vanilla extract", "red wine", "white wine", "beer", "rum",
+    "whiskey", "vodka", "gin", "tequila", "brandy", "campari", "aperol",
+    "lemon juice", "lime juice", "orange juice", "cranberry juice", "grape juice",
+    "apple cider vinegar", "balsamic vinegar", "red wine vinegar", "white wine vinegar"
+]
+
 SUBSTITIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
     'baking powder': ['baking soda', 'cream of tartar', 'yeast'],
@@ -210,6 +236,11 @@ def ingredientHelper(lststr):
     outdict = {}
     string_to_tag = lststr
     for i in string_to_tag:
+        found = False
+        for j in GENERAL_INGREDIENTS:
+            if j in i.lower():
+                found = True
+                rep = j
         if ',' in i:
             temp = i.split(',')
             t1 = tokenize.word_tokenize(temp[0])
@@ -248,11 +279,15 @@ def ingredientHelper(lststr):
         match5 = pattern5.match(i)
         match6 = pattern6.match(i)
         if match1:
-            newpat = re.compile(r'.*\((.*)\).*')
-            #print(newpat.match(i)[0])
-            outdict[match1.group(2)] = match1.group(1)
+            if found:
+                outdict[rep] = match1.group(1)
+            else:
+                outdict[match1.group(2)] = match1.group(1)
         elif match2:
-            outdict[match2.group(2)] = match2.group(1)
+            if found:
+                outdict[rep] = match2.group(1)
+            else:
+                outdict[match2.group(2)] = match2.group(1)
         elif match3:
             item = match3.group(1)
             q = match3.group(2)
@@ -265,9 +300,15 @@ def ingredientHelper(lststr):
             else:
                 outdict[item] = q
         elif match4:
-            outdict[match4.group(2)] = match4.group(1)
+            if found:
+                outdict[rep] = match4.group(1)
+            else:
+                outdict[match4.group(2)] = match4.group(1)
         elif match5:
-            outdict[match5.group(2)] = match5.group(1)
+            if found:
+                outdict[rep] = match5.group(1)
+            else:
+                outdict[match5.group(2)] = match5.group(1)
         elif match6:
             parts = i.split()
             # Convert the first two parts to floats and add them together
@@ -275,7 +316,10 @@ def ingredientHelper(lststr):
             # Combine the total with the rest of the string
             i = f"{total} {' '.join(parts[2:])}"
             newmatch = pattern5.match(i)
-            outdict[newmatch.group(2)] = newmatch.group(1) 
+            if found:
+                outdict[rep] = newmatch.group(1) 
+            else:
+                outdict[newmatch.group(2)] = newmatch.group(1) 
     return outdict
 
 def generate_recipe(url):
