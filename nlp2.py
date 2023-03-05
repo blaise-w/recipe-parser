@@ -341,21 +341,29 @@ def remy(rec):
                 print('If you are trying to skip to a step, please have the step number in numeric form.')
         elif 'how' in command:
             temp = True
-            if 'much' in command:
+            if 'much' in command or 'many' in command:
                 for key, val in r.ingredients.items():
                     if key in step:
                         print(val,'of',key)
                         temp = False
                         continue
                 if temp:
-                    print(generate_google(str(command)+'to'+str(step)))
+                    print(generate_google(str(command)+' to '+str(step.lower())))
             elif 'long' in command:
                 print(getTime(step))
-        elif command == "what":
-            pass
-        elif command == "do what":
-            print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, [r.steps[r.index]]))))
-            continue
+            else:
+                print(generate_youtube('how do i ' + str(step.lower())))
+        elif 'when' in command:
+            print(getTime(step))
+        elif 'what' in command:
+            if 'do' in command and not 'to' in command:
+                #print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, get_methods(step)))))
+                print(", ".join(cooking_methods.get(r.index, get_methods(step))))
+                continue
+            elif 'ingredient' in command or 'using' in command or 'with' in command or 'to' in command:
+                print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, [generate_google(str(command)+ ' ' + str(step))]))))
+            elif 'use' in command:
+                print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
         elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
             print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"])))) # only looks one step back. maybe keep as a variable instead
             continue
@@ -457,7 +465,6 @@ def getTime(text1):
     if mat:
         out = str(mat.group(1)) +' '+ str(mat.group(2))
     else:
-        print('it works')
         out = generate_google('how long to '+str(text))
     return out
 
