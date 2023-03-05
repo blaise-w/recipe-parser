@@ -353,10 +353,10 @@ def remy(rec):
                 print(getTime(step))
         elif command == "what":
             pass
-        elif command == "do what": # can generalize these to checking in a list of similar possible inputs
+        elif command == "do what":
             print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, [r.steps[r.index]]))))
             continue
-        elif command == "to what":
+        elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
             print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"])))) # only looks one step back. maybe keep as a variable instead
             continue
         elif command == "how much":
@@ -375,10 +375,10 @@ def remy(rec):
         else:
             command_words = command.split(' ')
             if command_words[0] == 'how':
-                link = "https://www.youtube.com/results?search_query="
-                for word in command_words:
-                    link = link + "+" + str(word)
-                print("This link should help: " + link)
+                generate_youtube(command)
+            elif command_words[0] == 'what' and command_words[1] == 'is':
+                generate_google(command)
+
 
         #print(r.steps[r.index])
         #print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
