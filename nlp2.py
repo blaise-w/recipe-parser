@@ -325,7 +325,7 @@ def remy(rec):
         elif "last" in command or "back" in command or "previous" in command:
             if r.index == 0:
                 print('You are at the first step')
-            else:
+            else: 
                 r.index -=1
         elif ("step" in command and ("go" in command or "jump" in command or "skip" in command) and "to" in command):
             pattern = re.compile(r'.*(\d+).*')
