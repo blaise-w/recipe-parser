@@ -331,17 +331,24 @@ def remy(rec):
         elif ("step" in command and ("go" in command or "jump" in command or "skip" in command) and "to" in command):
             pattern = re.compile(r'.*(\d+).*')
             mat = pattern.match(command)
-            n = int(mat.group(1))
-            if n>=len(r.steps):
-                print('This is not a valid step number')
+            if mat:
+                n = int(mat.group(1))
+                if n>=len(r.steps):
+                    print('This is not a valid step number')
+                else:
+                    r.index = n
             else:
-                r.index = n
+                print('If you are trying to skip to a step, please have the step number in numeric form.')
         elif 'how' in command:
+            temp = True
             if 'much' in command:
-                for key, val in r.ingredients:
-                    if key in command:
+                for key, val in r.ingredients.items():
+                    if key in step:
                         print(val,'of',key)
+                        temp = False
                         continue
+                if temp:
+                    print(generate_google(str(command)+'to'+str(step)))
             elif 'long' in command:
                 print(getTime(step))
         elif command == "what":
