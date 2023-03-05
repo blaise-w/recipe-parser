@@ -44,8 +44,8 @@ SUBSTITIONS = {
     'honey': ['brown sugar', 'white sugar', 'maple syrup'],
     'italian sausage': ['chorizo', 'andouille sausage'],
     'lemon juice': ['lime juice', 'vinegar'],
-    'milk (regular)': ['soy milk', 'almond milk', 'coconut milk'],
-    'mustard (dry)': ['mustard (prepared)', 'wasabi'],
+    'milk': ['soy milk', 'almond milk', 'coconut milk'],
+    'mustard': ['wasabi'],
     'nutmeg': ['allspice', 'cinnamon', 'ginger'],
     'olive oil': ['canola oil', 'vegetable oil', 'coconut oil'],
     'onion': ['shallot', 'garlic', 'chives'],
@@ -57,7 +57,7 @@ SUBSTITIONS = {
     'red pepper flakes': ['cayenne pepper', 'chili powder'],
     'rice': ['quinoa', 'couscous'],
     'salmon': ['trout', 'mackerel', 'tuna'],
-    'sauce (tomato)': ['salsa', 'marinara sauce'],
+    'tomato sauce': ['salsa', 'marinara sauce'],
     'shallot': ['onion', 'garlic', 'chives'],
     'shrimp': ['prawns', 'scallops', 'crab'],
     'sour cream': ['Greek yogurt', 'creme fraiche'],
@@ -146,7 +146,7 @@ class Recipe:
                     temp = cooking_methods.get(i, set())
                     temp.add(word)
                     cooking_methods[i] = temp
-                if word in TOOLS: # deal with "skillet or pan" just including both in list rn
+                if word in TOOLS:
                     temp = tools.get(i, set())
                     temp.add(word)
                     tools[i] = temp
@@ -156,8 +156,9 @@ class Recipe:
                         temp.add(tool)
                     tools[i] = temp
             for ing in self.ingredients:
+                #print(ing)
                 if ing in step:
-                    temp = ingredients.get(ing, set())
+                    temp = ingredients.get(i, set())
                     temp.add(ing)
                     ingredients[i] = temp
 
@@ -357,15 +358,14 @@ def remy(rec):
             print(getTime(step))
         elif 'what' in command:
             if 'do' in command and not 'to' in command:
-                #print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, get_methods(step)))))
                 print(", ".join(cooking_methods.get(r.index, get_methods(step))))
                 continue
-            elif 'ingredient' in command or 'using' in command or 'with' in command or 'to' in command:
+            elif 'ingredient' in command or 'using' in command or 'with' in command or 'to ' in command:
                 print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, [generate_google(str(command)+ ' ' + str(step))]))))
-                print(ingredients)
-                exit()
             elif 'use' in command:
                 print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
+            elif 'temperature' in command:
+                print(getTemperature(step))
         elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
             print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"])))) # only looks one step back. maybe keep as a variable instead
             continue
@@ -472,7 +472,7 @@ def getTime(text1):
 
 def getTemperature(text1):
     text = text1.lower()
-    pat = re.compile(r'.*(\d+ degrees .).*')
+    pat = re.compile(r'.* (\d+ degrees .).*')
     match = pat.match(text)
     if match:
         return match.group(1)
