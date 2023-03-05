@@ -362,6 +362,8 @@ def remy(rec):
                 continue
             elif 'ingredient' in command or 'using' in command or 'with' in command or 'to' in command:
                 print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, [generate_google(str(command)+ ' ' + str(step))]))))
+                print(ingredients)
+                exit()
             elif 'use' in command:
                 print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
         elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
@@ -453,8 +455,8 @@ def get_methods(text):
     return verblist
 
 def printingredients(r):
-    for i in r.ingredientlist:
-        print(i)
+    for i,k in r.ingredients.items():
+        print(i, ':', k)
     print()
     print()
 
@@ -467,6 +469,15 @@ def getTime(text1):
     else:
         out = generate_google('how long to '+str(text))
     return out
+
+def getTemperature(text1):
+    text = text1.lower()
+    pat = re.compile(r'.*(\d+ degrees .).*')
+    match = pat.match(text)
+    if match:
+        return match.group(1)
+    else:
+        return generate_google('what temperature should i '+str(text))
 
 RecipeDaddy()
 
