@@ -3,9 +3,10 @@ from urllib.request import urlopen
 import nltk
 from nltk import tokenize
 import re
-import requests
+#import requests
 
-COOKING_METHODS = ['boil', 'bake', 'fry', 'broil', 'steam', 'roast', 'airfry', 'cook', 'freeze', 'melt', 'saute', 'sauté', 'grill', 'melt', 'stirring', 'pour', 'dice', 'mince', 'heat', 'keep warm', 'reduce heat'] # two word instructions ??
+COOKING_METHODS = ['add', 'airfry', 'bake', 'boil', 'broil', 'chop', 'combine', 'cook', 'cool', 'cream','cube', 'cut', 'dice', 'drain', 'fry', 'freeze', 'garnish', 'grill', 'heat', 'knead', 'keep warm', 'marinate', 'melt', 'mince', 'mix', 'peel', 'poach', 'pour', 'preheat', 'reduce heat', 'roast', 'saute', 'sauté', 'season', 'simmer', 'slice', 'steam', 'stir', 'strain', 'toast', 'whisk']
+
 INGREDIENTS = ['tomatoes', 'pasta', 'oil', 'garlic', 'tomato paste', 'salt', 'pepper', 'basil', 'cheese', 'water']
 # edge case tomato versus tomato paste?? idk
 TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
@@ -186,6 +187,7 @@ def ingredientHelper(lststr):
         match6 = pattern6.match(i)
         if match1:
             newpat = re.compile(r'.*\((.*)\).*')
+            #print(newpat.match(i)[0])
             outdict[match1.group(2)] = match1.group(1)
         elif match2:
             outdict[match2.group(2)] = match2.group(1)
@@ -221,9 +223,23 @@ def generate_recipe(url):
     Recipe.organizeInfo(r, text)
     return r
 
-def stepbot(rec):
-    #url = input('Enter the link to the recipe: ')
-    r = rec
+def generate_youtube(command):
+    command_words = command.split(' ')
+    link = "https://www.youtube.com/results?search_query="
+    for word in command_words:
+        link = link + "+" + str(word)
+    print("This link should help: " + link)
+
+def generate_google(command):
+    command_words = command.split(' ')
+    link = "https://www.google.com/search?q="
+    for word in command_words:
+        link = link + "+" + str(word)
+    print("This link should help: " + link)
+
+def bot2():
+    url = input('Enter the link to the recipe: ')
+    r = generate_recipe(url)
     #Recipe.printinfo(r)
     #print("hey \n")
     #commit smth new
@@ -260,6 +276,12 @@ def stepbot(rec):
         elif command == "with what":
             print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
             continue
+        command_words = command.split(' ')
+        if command_words[0] == 'how':
+            link = "https://www.youtube.com/results?search_query="
+            for word in command_words:
+                link = link + "+" + str(word)
+            print("This link should help: " + link)
 
         print(r.steps[r.index])
         print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
@@ -286,14 +308,20 @@ def bot():
             c = input()
             if c == 'y':
                 valid = False
-                stepbot(r)
+                stepparser(r)
 
         elif choice == '2':
             valid = False
-            stepbot(r)
+            stepparser(r)
         else:
             print('Hmm I do not understand what you want me to do')
 
+def stepparser(r):
+    steps = r.steps
+    for step in steps:
+        print(step)
+        print(get_methods(step))
+    
 def get_methods(text):
     verblist = []
     tokens = tokenize.word_tokenize(text.lower())
