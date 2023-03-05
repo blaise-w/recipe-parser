@@ -3,9 +3,14 @@ from urllib.request import urlopen
 import nltk
 from nltk import tokenize
 import re
-import requests
+#import requests
 
+COOKING_METHODS = ['add', 'airfry', 'bake', 'boil', 'broil', 'chop', 'combine', 'cook', 'cool', 'cream','cube', 'cut', 'dice', 'drain', 'fry', 'freeze', 'garnish', 'grill', 'heat', 'knead', 'keep warm', 'marinate', 'melt', 'mince', 'mix', 'peel', 'poach', 'pour', 'preheat', 'reduce heat', 'roast', 'saute', 'sauté', 'season', 'simmer', 'slice', 'steam', 'stir', 'strain', 'toast', 'whisk']
+
+<<<<<<< Updated upstream
 COOKING_METHODS = ['add', 'airfry', 'bake', 'boil', 'broil', 'chop', 'combine', 'cook', 'cool', 'cream', 'cube', 'cut', 'dice', 'drain', 'fry', 'freeze', 'garnish', 'grill', 'heat', 'knead', 'keep warm', 'marinate', 'melt', 'mince', 'mix', 'peel', 'poach', 'pour', 'preheat', 'reduce heat', 'roast', 'saute', 'sauté', 'season', 'simmer', 'slice', 'steam', 'stir', 'strain', 'toast', 'whisk']
+=======
+>>>>>>> Stashed changes
 INGREDIENTS = ['tomatoes', 'pasta', 'oil', 'garlic', 'tomato paste', 'salt', 'pepper', 'basil', 'cheese', 'water']
 # edge case tomato versus tomato paste?? idk
 TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
@@ -186,6 +191,10 @@ def ingredientHelper(lststr):
         match6 = pattern6.match(i)
         if match1:
             newpat = re.compile(r'.*\((.*)\).*')
+<<<<<<< Updated upstream
+=======
+            #print(newpat.match(i)[0])
+>>>>>>> Stashed changes
             outdict[match1.group(2)] = match1.group(1)
         elif match2:
             outdict[match2.group(2)] = match2.group(1)
@@ -273,6 +282,12 @@ def bot2():
         elif command == "with what":
             print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
             continue
+        command_words = command.split(' ')
+        if command_words[0] == 'how':
+            link = "https://www.youtube.com/results?search_query="
+            for word in command_words:
+                link = link + "+" + str(word)
+            print("This link should help: " + link)
 
         print(r.steps[r.index])
         print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
