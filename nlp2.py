@@ -237,9 +237,9 @@ def generate_google(command):
         link = link + "+" + str(word)
     print("This link should help: " + link)
 
-def bot2():
-    url = input('Enter the link to the recipe: ')
-    r = generate_recipe(url)
+def stepbot(rec):
+    #url = input('Enter the link to the recipe: ')
+    r = rec
     #Recipe.printinfo(r)
     #print("hey \n")
     #commit smth new
@@ -308,19 +308,13 @@ def bot():
             c = input()
             if c == 'y':
                 valid = False
-                stepparser(r)
+                stepbot(r)
 
         elif choice == '2':
             valid = False
-            stepparser(r)
+            stepbot(r)
         else:
             print('Hmm I do not understand what you want me to do')
-
-def stepparser(r):
-    steps = r.steps
-    for step in steps:
-        print(step)
-        print(get_methods(step))
     
 def get_methods(text):
     verblist = []
