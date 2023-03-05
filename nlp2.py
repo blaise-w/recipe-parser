@@ -217,7 +217,6 @@ def ingredientHelper(lststr):
             word = t[-1]
             if not 'JJ' in word[1]:
                 i = temp[0]
-        
         if ' - ' in i:
             i = i.split(' - ')[0]
 
@@ -366,34 +365,29 @@ def remy(rec):
                 print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
             elif 'temperature' in command:
                 print(getTemperature(step))
-        elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
-            print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"])))) # only looks one step back. maybe keep as a variable instead
-            continue
-        elif command == "how much":
-            printed = False
-            step_ingredients = ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"]))
-            for ingredient in r.ingredients:
-                for i in step_ingredients:
-                    if re.search(i, ingredient):
-                        printed = True
-                        print(ingredient)
-            if printed: continue
-            print("No ingredients")
-        elif command == "with what":
-            print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
-            continue
-        else:
-            command_words = command.split(' ')
-            if command_words[0] == 'how':
-                print(generate_youtube(command))
-            elif command_words[0] == 'what' and command_words[1] == 'is':
+            elif 'what is' in command:
                 print(generate_google(command))
+            else:
+                continue
+        elif 'substitut' in command:
+            notfound = True
+            for i in r.ingredients:
+                if i in command:
+                    notfound = False
+                    if i in SUBSTITIONS:
+                        subs = ", ".join(SUBSTITIONS[i])
+                        print('You can substitute', subs, 'for', i)
+                    else:
+                        print(generate_google('substitute ingredient for '+i))
+            if notfound:
+                print(generate_google(command))
+        else:
+            print('I\'m not really sure what you are trying to say')
+            print('Perhaps you would find the following links useful')
+            print(generate_google(command))
+            print(generate_youtube(command))
 
-
-        #print(r.steps[r.index])
-        #print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
-
-    print("Bon Apetit! :)")
+    print("Bon Apetit my child! :)")
 
 def RecipeDaddy():
     print('Hi I\'m Recipe Daddy! :)')
