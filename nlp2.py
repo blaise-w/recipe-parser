@@ -13,6 +13,98 @@ TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
 
 VERB_TO_TOOL = {'drain':['colander'],'simmer':['pan'],'peel':['peeler','knife'],'boil':['pot'],'bake':['oven'],'airfry':['airfryer'],'saute':['spatula','pan'],'sauté':['spatula','pan'],'cut':['knife'],'chop':['knife'],'stir':['spatula','wooden spoon'],'mix':['spatula','wooden spoon']}
 
+MEAT_INGREDIENTS = ["beef", "pork", "chicken", "lamb", "venison", "turkey", "duck", "goose", "quail", 
+"rabbit", "boar", "elk", "bison", "kangaroo", "buffalo", "veal", "ham", "bacon", "sausage", "chorizo", 
+"pepperoni", "prosciutto", "salami", "pastrami", "corned beef", "ground beef", "ground pork", "ground chicken", 
+"ground turkey", "ground lamb", "ground venison", "ground bison", "ground elk", "ground kangaroo", 
+"ground buffalo", "beef jerky", "pork belly", "liver", "sweetbreads", "oxtail", "short ribs", "ribeye",
+ "filet mignon", "sirloin", "flank steak", "skirt steak", "picanha", "brisket", "pork chops", "pork tenderloin", 
+ "rack of lamb", "leg of lamb", "lamb chops", "chicken breasts", "chicken thighs", "chicken wings", 
+ "chicken legs", "chicken drumsticks", "whole chicken", "turkey breast", "turkey legs", "turkey wings", 
+ "duck breast", "duck legs", "rabbit legs", "boar chops", "boar tenderloin", "elk chops", "elk tenderloin",
+  "bison burgers", "bison ribeye", "bison tenderloin", "kangaroo burgers", "kangaroo loin", "buffalo burgers",
+   "buffalo ribeye", "buffalo tenderloin"]
+
+VEGETARIAN_SUBSTITIONS = substitutions = {
+    "beef": "mushrooms",
+    "pork": "jackfruit",
+    "chicken": "tofu",
+    "lamb": "seitan",
+    "venison": "eggplant",
+    "turkey": "tempeh",
+    "duck": "mushrooms",
+    "goose": "mushrooms",
+    "quail": "tofu",
+    "rabbit": "portobello mushrooms",
+    "boar": "mushrooms",
+    "elk": "portobello mushrooms",
+    "bison": "tofu",
+    "kangaroo": "portobello mushrooms",
+    "buffalo": "tofu",
+    "veal": "tofu",
+    "ham": "soy ham",
+    "bacon": "tempeh bacon",
+    "sausage": "veggie sausage",
+    "chorizo": "soyrizo",
+    "pepperoni": "veggie pepperoni",
+    "prosciutto": "vegetarian prosciutto",
+    "salami": "veggie salami",
+    "pastrami": "vegetarian pastrami",
+    "corned beef": "veggie corned beef",
+    "ground beef": "textured vegetable protein",
+    "ground pork": "textured vegetable protein",
+    "ground chicken": "textured vegetable protein",
+    "ground turkey": "textured vegetable protein",
+    "ground lamb": "textured vegetable protein",
+    "ground venison": "textured vegetable protein",
+    "ground bison": "textured vegetable protein",
+    "ground elk": "textured vegetable protein",
+    "ground kangaroo": "textured vegetable protein",
+    "ground buffalo": "textured vegetable protein",
+    "beef jerky": "tofu jerky",
+    "pork belly": "smoked tofu",
+    "liver": "mushrooms",
+    "sweetbreads": "tofu",
+    "oxtail": "mushrooms",
+    "short ribs": "tempeh",
+    "ribeye": "portobello mushrooms",
+    "filet mignon": "grilled tofu",
+    "sirloin": "portobello mushrooms",
+    "flank steak": "seitan",
+    "skirt steak": "tofu",
+    "picanha": "mushrooms",
+    "brisket": "seitan",
+    "pork chops": "portobello mushrooms",
+    "pork tenderloin": "tofu",
+    "rack of lamb": "grilled eggplant",
+    "leg of lamb": "grilled eggplant",
+    "lamb chops": "grilled eggplant",
+    "chicken breasts": "tempeh",
+    "chicken thighs": "tofu",
+    "chicken wings": "tempeh",
+    "chicken legs": "tofu",
+    "chicken drumsticks": "tofu",
+    "whole chicken": "seitan",
+    "turkey breast": "tempeh",
+    "turkey legs": "tofurkey",
+    "turkey wings": "tofurkey",
+    "duck breast": "portobello mushrooms",
+    "duck legs": "portobello mushrooms",
+    "rabbit legs": "grilled eggplant",
+    "boar chops": "portobello mushrooms",
+    "boar tenderloin": "grilled tofu",
+    "elk chops": "portobello mushrooms",
+    "elk tenderloin": "grilled tofu",
+    "bison burgers": "tofu burgers",
+    "bison ribeye": "portobello mushrooms",
+    "bison tenderloin": "grilled tofu",
+    "kangaroo burgers": "tofu burgers",
+    "kangaroo loin": "portobello mushrooms",
+    "buffalo burgers": "tofu burgers",
+    "buffalo ribeye": "portobello mushrooms",
+    "buffalo tenderloin": "grilled tofu"
+}
+
 GENERAL_INGREDIENTS = [
     "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon",
     "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh",
@@ -519,3 +611,18 @@ def getTemperature(text1):
 
 RecipeDaddy()
 
+def vegTransform(rec):
+    r = rec
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    for i in ingreds:
+        if i in MEAT_INGREDIENTS:
+            name = VEGETARIAN_SUBSTITIONS[i]
+            changed_ingredients[name] = r.ingredients[i]
+        else:
+            changed_ingredients[i] = r.ingredients[i]
+
+    r.ingredients = changed_ingredients
+    return r
+
+    
