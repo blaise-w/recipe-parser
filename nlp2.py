@@ -13,6 +13,124 @@ TOOLS = ['skillet', 'pan', 'pot', 'bowl', 'knife', 'oven']
 
 VERB_TO_TOOL = {'drain':['colander'],'simmer':['pan'],'peel':['peeler','knife'],'boil':['pot'],'bake':['oven'],'airfry':['airfryer'],'saute':['spatula','pan'],'sauté':['spatula','pan'],'cut':['knife'],'chop':['knife'],'stir':['spatula','wooden spoon'],'mix':['spatula','wooden spoon']}
 
+MEAT_INGREDIENTS = ["beef", "pork", "chicken", "lamb", "venison", "turkey", "duck", "goose", "quail", 
+"rabbit", "boar", "elk", "bison", "kangaroo", "buffalo", "veal", "ham", "bacon", "sausage", "chorizo", 
+"pepperoni", "prosciutto", "salami", "pastrami", "corned beef", "ground beef", "ground pork", "ground chicken", 
+"ground turkey", "ground lamb", "ground venison", "ground bison", "ground elk", "ground kangaroo", 
+"ground buffalo", "beef jerky", "pork belly", "liver", "sweetbreads", "oxtail", "short ribs", "ribeye",
+ "filet mignon", "sirloin", "flank steak", "skirt steak", "picanha", "brisket", "pork chops", "pork tenderloin", 
+ "rack of lamb", "leg of lamb", "lamb chops", "chicken breasts", "chicken thighs", "chicken wings", 
+ "chicken legs", "chicken drumsticks", "whole chicken", "turkey breast", "turkey legs", "turkey wings", 
+ "duck breast", "duck legs", "rabbit legs", "boar chops", "boar tenderloin", "elk chops", "elk tenderloin",
+  "bison burgers", "bison ribeye", "bison tenderloin", "kangaroo burgers", "kangaroo loin", "buffalo burgers",
+   "buffalo ribeye", "buffalo tenderloin"]
+
+VEGETARIAN_SUBSTITIONS = substitutions = {
+    "beef": "mushrooms",
+    "pork": "jackfruit",
+    "chicken": "tofu",
+    "lamb": "seitan",
+    "venison": "eggplant",
+    "turkey": "tempeh",
+    "duck": "mushrooms",
+    "goose": "mushrooms",
+    "quail": "tofu",
+    "rabbit": "portobello mushrooms",
+    "boar": "mushrooms",
+    "elk": "portobello mushrooms",
+    "bison": "tofu",
+    "kangaroo": "portobello mushrooms",
+    "buffalo": "tofu",
+    "veal": "tofu",
+    "ham": "soy ham",
+    "bacon": "tempeh bacon",
+    "sausage": "veggie sausage",
+    "chorizo": "soyrizo",
+    "pepperoni": "veggie pepperoni",
+    "prosciutto": "vegetarian prosciutto",
+    "salami": "veggie salami",
+    "pastrami": "vegetarian pastrami",
+    "corned beef": "veggie corned beef",
+    "ground beef": "textured vegetable protein",
+    "ground pork": "textured vegetable protein",
+    "ground chicken": "textured vegetable protein",
+    "ground turkey": "textured vegetable protein",
+    "ground lamb": "textured vegetable protein",
+    "ground venison": "textured vegetable protein",
+    "ground bison": "textured vegetable protein",
+    "ground elk": "textured vegetable protein",
+    "ground kangaroo": "textured vegetable protein",
+    "ground buffalo": "textured vegetable protein",
+    "beef jerky": "tofu jerky",
+    "pork belly": "smoked tofu",
+    "liver": "mushrooms",
+    "sweetbreads": "tofu",
+    "oxtail": "mushrooms",
+    "short ribs": "tempeh",
+    "ribeye": "portobello mushrooms",
+    "filet mignon": "grilled tofu",
+    "sirloin": "portobello mushrooms",
+    "flank steak": "seitan",
+    "skirt steak": "tofu",
+    "picanha": "mushrooms",
+    "brisket": "seitan",
+    "pork chops": "portobello mushrooms",
+    "pork tenderloin": "tofu",
+    "rack of lamb": "grilled eggplant",
+    "leg of lamb": "grilled eggplant",
+    "lamb chops": "grilled eggplant",
+    "chicken breasts": "tempeh",
+    "chicken thighs": "tofu",
+    "chicken wings": "tempeh",
+    "chicken legs": "tofu",
+    "chicken drumsticks": "tofu",
+    "whole chicken": "seitan",
+    "turkey breast": "tempeh",
+    "turkey legs": "tofurkey",
+    "turkey wings": "tofurkey",
+    "duck breast": "portobello mushrooms",
+    "duck legs": "portobello mushrooms",
+    "rabbit legs": "grilled eggplant",
+    "boar chops": "portobello mushrooms",
+    "boar tenderloin": "grilled tofu",
+    "elk chops": "portobello mushrooms",
+    "elk tenderloin": "grilled tofu",
+    "bison burgers": "tofu burgers",
+    "bison ribeye": "portobello mushrooms",
+    "bison tenderloin": "grilled tofu",
+    "kangaroo burgers": "tofu burgers",
+    "kangaroo loin": "portobello mushrooms",
+    "buffalo burgers": "tofu burgers",
+    "buffalo ribeye": "portobello mushrooms",
+    "buffalo tenderloin": "grilled tofu"
+}
+
+GENERAL_INGREDIENTS = [
+    "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon",
+    "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh",
+    "onion", "garlic", "ginger", "carrot", "celery", "potato", "sweet potato",
+    "broccoli", "cauliflower", "spinach", "kale", "arugula", "lettuce",
+    "tomato", "cucumber", "bell pepper", "chili pepper", "mushroom",
+    "rice", "quinoa", "pasta", "bread", "flour", "sugar", "salt", "pepper",
+    "olive oil", "vegetable oil", "coconut oil", "sesame oil", "peanut oil",
+    "soy sauce", "teriyaki sauce", "fish sauce", "oyster sauce", "hoisin sauce",
+    "honey", "maple syrup", "agave syrup", "molasses", "brown sugar",
+    "mustard", "ketchup", "mayonnaise", "sour cream", "cream cheese", "butter",
+    "cheddar cheese", "parmesan cheese", "feta cheese", "mozzarella cheese",
+    "milk", "yogurt", "egg", "baking powder", "baking soda", "yeast",
+    "cumin", "coriander", "paprika", "cinnamon", "nutmeg", "cloves",
+    "chili powder", "curry powder", "garam masala", "turmeric", "bay leaves",
+    "thyme", "rosemary", "basil", "oregano", "parsley", "cilantro",
+    "lemon", "lime", "orange", "grapefruit", "apple", "banana", "avocado",
+    "pineapple", "mango", "peach", "pear", "plum", "coconut", "raisins",
+    "almonds", "cashews", "walnuts", "peanuts", "pistachios", "sunflower seeds",
+    "pumpkin seeds", "flaxseed", "chia seeds", "oats", "granola", "chocolate chips",
+    "cocoa powder", "vanilla extract", "red wine", "white wine", "beer", "rum",
+    "whiskey", "vodka", "gin", "tequila", "brandy", "campari", "aperol",
+    "lemon juice", "lime juice", "orange juice", "cranberry juice", "grape juice",
+    "apple cider vinegar", "balsamic vinegar", "red wine vinegar", "white wine vinegar"
+]
+
 SUBSTITIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
     'baking powder': ['baking soda', 'cream of tartar', 'yeast'],
@@ -210,6 +328,11 @@ def ingredientHelper(lststr):
     outdict = {}
     string_to_tag = lststr
     for i in string_to_tag:
+        found = False
+        for j in GENERAL_INGREDIENTS:
+            if j in i.lower():
+                found = True
+                rep = j
         if ',' in i:
             temp = i.split(',')
             t1 = tokenize.word_tokenize(temp[0])
@@ -217,7 +340,6 @@ def ingredientHelper(lststr):
             word = t[-1]
             if not 'JJ' in word[1]:
                 i = temp[0]
-        
         if ' - ' in i:
             i = i.split(' - ')[0]
 
@@ -249,11 +371,15 @@ def ingredientHelper(lststr):
         match5 = pattern5.match(i)
         match6 = pattern6.match(i)
         if match1:
-            newpat = re.compile(r'.*\((.*)\).*')
-            #print(newpat.match(i)[0])
-            outdict[match1.group(2)] = match1.group(1)
+            if found:
+                outdict[rep] = match1.group(1)
+            else:
+                outdict[match1.group(2)] = match1.group(1)
         elif match2:
-            outdict[match2.group(2)] = match2.group(1)
+            if found:
+                outdict[rep] = match2.group(1)
+            else:
+                outdict[match2.group(2)] = match2.group(1)
         elif match3:
             item = match3.group(1)
             q = match3.group(2)
@@ -266,9 +392,15 @@ def ingredientHelper(lststr):
             else:
                 outdict[item] = q
         elif match4:
-            outdict[match4.group(2)] = match4.group(1)
+            if found:
+                outdict[rep] = match4.group(1)
+            else:
+                outdict[match4.group(2)] = match4.group(1)
         elif match5:
-            outdict[match5.group(2)] = match5.group(1)
+            if found:
+                outdict[rep] = match5.group(1)
+            else:
+                outdict[match5.group(2)] = match5.group(1)
         elif match6:
             parts = i.split()
             # Convert the first two parts to floats and add them together
@@ -276,7 +408,10 @@ def ingredientHelper(lststr):
             # Combine the total with the rest of the string
             i = f"{total} {' '.join(parts[2:])}"
             newmatch = pattern5.match(i)
-            outdict[newmatch.group(2)] = newmatch.group(1) 
+            if found:
+                outdict[rep] = newmatch.group(1) 
+            else:
+                outdict[newmatch.group(2)] = newmatch.group(1) 
     return outdict
 
 def generate_recipe(url):
@@ -358,42 +493,37 @@ def remy(rec):
             print(getTime(step))
         elif 'what' in command:
             if 'do' in command and not 'to' in command:
-                #print(", ".join(cooking_methods.get(r.index, cooking_methods.get(r.index - 1, get_methods(step)))))
                 print(", ".join(cooking_methods.get(r.index, get_methods(step))))
                 continue
-            elif 'ingredient' in command or 'using' in command or 'with' in command or 'to' in command:
+            elif 'ingredient' in command or 'using' in command or 'with' in command or 'to ' in command:
                 print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, [generate_google(str(command)+ ' ' + str(step))]))))
-  
             elif 'use' in command:
                 print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
-        elif 'what' in command and 'ingredient' in command or 'using what' in command or 'with what' in command: 
-            print(", ".join(ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"])))) # only looks one step back. maybe keep as a variable instead
-            continue
-        elif command == "how much":
-            printed = False
-            step_ingredients = ingredients.get(r.index, ingredients.get(r.index - 1, ["No ingredients"]))
-            for ingredient in r.ingredients:
-                for i in step_ingredients:
-                    if re.search(i, ingredient):
-                        printed = True
-                        print(ingredient)
-            if printed: continue
-            print("No ingredients")
-        elif command == "with what":
-            print(", ".join(tools.get(r.index, tools.get(r.index - 1, ["Use what you have"]))))
-            continue
-        else:
-            command_words = command.split(' ')
-            if command_words[0] == 'how':
-                print(generate_youtube(command))
-            elif command_words[0] == 'what' and command_words[1] == 'is':
+            elif 'temperature' in command:
+                print(getTemperature(step))
+            elif 'what is' in command:
                 print(generate_google(command))
+            else:
+                continue
+        elif 'substitut' in command:
+            notfound = True
+            for i in r.ingredients:
+                if i in command:
+                    notfound = False
+                    if i in SUBSTITIONS:
+                        subs = ", ".join(SUBSTITIONS[i])
+                        print('You can substitute', subs, 'for', i)
+                    else:
+                        print(generate_google('substitute ingredient for '+i))
+            if notfound:
+                print(generate_google(command))
+        else:
+            print('I\'m not really sure what you are trying to say')
+            print('Perhaps you would find the following links useful')
+            print(generate_google(command))
+            print(generate_youtube(command))
 
-
-        #print(r.steps[r.index])
-        #print(nltk.pos_tag(tokenize.word_tokenize(r.steps[r.index].lower())))
-
-    print("Bon Apetit! :)")
+    print("Bon Apetit my child! :)")
 
 def RecipeDaddy():
     print('Hi I\'m Recipe Daddy! :)')
@@ -455,8 +585,8 @@ def get_methods(text):
     return verblist
 
 def printingredients(r):
-    for i in r.ingredientlist:
-        print(i)
+    for i,k in r.ingredients.items():
+        print(i, ':', k)
     print()
     print()
 
@@ -470,5 +600,29 @@ def getTime(text1):
         out = generate_google('how long to '+str(text))
     return out
 
+def getTemperature(text1):
+    text = text1.lower()
+    pat = re.compile(r'.* (\d+ degrees .).*')
+    match = pat.match(text)
+    if match:
+        return match.group(1)
+    else:
+        return generate_google('what temperature should i '+str(text))
+
 RecipeDaddy()
 
+def vegTransform(rec):
+    r = rec
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    for i in ingreds:
+        if i in MEAT_INGREDIENTS:
+            name = VEGETARIAN_SUBSTITIONS[i]
+            changed_ingredients[name] = r.ingredients[i]
+        else:
+            changed_ingredients[i] = r.ingredients[i]
+
+    r.ingredients = changed_ingredients
+    return r
+
+    
