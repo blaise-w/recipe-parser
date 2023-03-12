@@ -25,7 +25,7 @@ MEAT_INGREDIENTS = ["beef", "pork", "chicken", "lamb", "venison", "turkey", "duc
   "bison burgers", "bison ribeye", "bison tenderloin", "kangaroo burgers", "kangaroo loin", "buffalo burgers",
    "buffalo ribeye", "buffalo tenderloin"]
 
-VEGETARIAN_SUBSTITIONS = substitutions = {
+VEGETARIAN_SUBSTITUTIONS = substitutions = {
     "beef": "mushrooms",
     "pork": "jackfruit",
     "chicken": "tofu",
@@ -76,9 +76,9 @@ VEGETARIAN_SUBSTITIONS = substitutions = {
     "brisket": "seitan",
     "pork chops": "portobello mushrooms",
     "pork tenderloin": "tofu",
-    "rack of lamb": "grilled eggplant",
-    "leg of lamb": "grilled eggplant",
-    "lamb chops": "grilled eggplant",
+    "rack of lamb": "eggplant",
+    "leg of lamb": "eggplant",
+    "lamb chops": "eggplant",
     "chicken breasts": "tempeh",
     "chicken thighs": "tofu",
     "chicken wings": "tempeh",
@@ -90,7 +90,7 @@ VEGETARIAN_SUBSTITIONS = substitutions = {
     "turkey wings": "tofurkey",
     "duck breast": "portobello mushrooms",
     "duck legs": "portobello mushrooms",
-    "rabbit legs": "grilled eggplant",
+    "rabbit legs": "eggplant",
     "boar chops": "portobello mushrooms",
     "boar tenderloin": "grilled tofu",
     "elk chops": "portobello mushrooms",
@@ -104,6 +104,158 @@ VEGETARIAN_SUBSTITIONS = substitutions = {
     "buffalo ribeye": "portobello mushrooms",
     "buffalo tenderloin": "grilled tofu"
 }
+
+VEGETARIAN_INGREDIENTS = ['mushrooms', 'jackfruit', 'tofu', 'seitan', 'eggplant', 'tempeh', 'soy ham', 'tempeh bacon', 
+                          'veggie sausage', 'soyrizo', 'vegetarian prosciutto', 'veggie salami', 'vegetarian pastrami',
+                         'veggie corned beef', 'textured vegetable protein', 'tofu jerky', 'smoked tofu', 'eggplant',
+                         'tofurkey', 'tofu burgers', 'grilled tofu']
+    
+NON_VEGETARIAN_SUBSTITUTIONS = {
+    'mushrooms': ['beef', 'duck', 'goose', 'boar', 'elk', 'oxtail', 'picanha', 'pork chops', 'boar chops'],
+    'jackfruit': ['pork'],
+    'tofu': ['chicken', 'quail', 'veal', 'short ribs', 'chicken legs', 'chicken drumsticks', 'turkey breast', 'rabbit legs', 'kangaroo loin', 'chicken breasts', 'chicken thighs', 'turkey legs', 'turkey wings', 'pork tenderloin'],
+    'seitan': ['lamb', 'flank steak', 'brisket', 'whole chicken', 'boar tenderloin', 'bison tenderloin', 'elk tenderloin'],
+    'eggplant': ['venison', 'rack of lamb', 'leg of lamb', 'lamb chops', 'duck breast', 'duck legs'],
+    'tempeh': ['turkey', 'chicken wings', 'bison burgers'],
+    'soy ham': ['ham'],
+    'tempeh bacon': ['bacon'],
+    'veggie sausage': ['sausage'],
+    'soyrizo': ['chorizo'],
+    'vegetarian prosciutto': ['prosciutto'],
+    'veggie salami': ['salami'],
+    'vegetarian pastrami': ['pastrami'],
+    'veggie corned beef': ['corned beef'],
+    'textured vegetable protein': ['ground beef', 'ground pork', 'ground chicken', 'ground turkey', 'ground lamb', 'ground venison', 'ground bison', 'ground elk', 'ground kangaroo', 'ground buffalo'],
+    'tofu jerky': ['beef jerky'],
+    'smoked tofu': ['pork belly'],
+    'grilled tofu': ['filet mignon', 'bison tenderloin', 'elk tenderloin', 'boar tenderloin'],
+    'tofurkey': ['turkey legs', 'turkey wings'],
+    'tofu burgers': ['bison burgers', 'kangaroo burgers', 'buffalo burgers'],
+    'portobello mushrooms': ['rabbit', 'ribeye', 'sirloin', 'pork tenderloin', 'duck breast', 'duck legs', 'boar chops', 'elk chops', 'buffalo ribeye']
+}
+
+HEALTHY_SUBSTITUTIONS = {
+    "Butter": ["Coconut oil", "olive oil", "avocado oil", "ghee"],
+    "Sugar": ["Honey", "maple syrup", "agave nectar", "stevia"],
+    "White flour": ["Almond flour", "coconut flour", "oat flour", "whole wheat flour"],
+    "Sour cream": ["Greek yogurt", "plain yogurt", "silken tofu"],
+    "Heavy cream": ["Coconut cream", "cashew cream", "silken tofu"],
+    "Cream cheese": ["Vegan cream cheese", "cashew cream", "silken tofu"],
+    "Mayonnaise": ["Greek yogurt", "avocado", "hummus"],
+    "Breadcrumbs": ["Almond meal", "crushed cornflakes", "panko breadcrumbs"],
+    "White rice": ["Brown rice", "quinoa", "cauliflower rice"],
+    "Potatoes": ["Sweet potatoes", "cauliflower", "parsnips"],
+    "Pasta": ["Zucchini noodles", "spaghetti squash", "brown rice noodles"],
+    "Milk": ["Almond milk", "coconut milk", "oat milk", "soy milk"],
+    "Cheese": ["Nutritional yeast", "vegan cheese", "tofu"],
+    "Beef": ["Turkey", "chicken", "tempeh", "portobello mushrooms"],
+    "Pork": ["Turkey", "chicken", "tempeh", "portobello mushrooms"],
+    "Chicken": ["Turkey", "tofu", "tempeh"],
+    "Lamb": ["Grilled eggplant", "tempeh"],
+    "Fish": ["Tofu", "tempeh"],
+    "Shrimp": ["Tofu", "tempeh"],
+    "Bacon": ["Turkey bacon", "tempeh bacon", "coconut bacon"],
+    "Sausage": ["Veggie sausage", "tempeh sausage"],
+    "Hot dogs": ["Veggie dogs", "tofu dogs"],
+    "Ground beef": ["Lentils", "black beans", "mushrooms", "textured vegetable protein"],
+    "Eggs": ["Tofu", "chickpea flour"],
+    "Vegetable oil": ["Coconut oil", "avocado oil"],
+    "Canola oil": ["Coconut oil", "avocado oil"],
+    "Salt": ["Sea salt", "pink Himalayan salt", "herbs and spices"]
+}
+
+UNHEALTHY_SUBSTITUTIONS = {
+    "Coconut oil": ["Butter", "Vegetable oil", "Canola oil"],
+    "olive oil": ["Butter"],
+    "avocado oil": ["Butter", "Vegetable oil", "Canola oil"],
+    "ghee": ["Butter"],
+    "Honey": ["Sugar"],
+    "maple syrup": ["Sugar"],
+    "agave nectar": ["Sugar"],
+    "stevia": ["Sugar"],
+    "Almond flour": ["White flour"],
+    "coconut flour": ["White flour"],
+    "oat flour": ["White flour"],
+    "whole wheat flour": ["White flour"],
+    "Greek yogurt": ["Sour cream"],
+    "plain yogurt": ["Sour cream"],
+    "silken tofu": ["Sour cream", "Heavy cream", "Cream cheese"],
+    "Coconut cream": ["Heavy cream"],
+    "cashew cream": ["Heavy cream", "Cream cheese"],
+    "avocado": ["Mayonnaise"],
+    "hummus": ["Mayonnaise"],
+    "Almond meal": ["Breadcrumbs"],
+    "crushed cornflakes": ["Breadcrumbs"],
+    "panko breadcrumbs": ["Breadcrumbs"],
+    "Brown rice": ["White rice"],
+    "quinoa": ["White rice"],
+    "cauliflower rice": ["White rice"],
+    "Sweet potatoes": ["Potatoes"],
+    "cauliflower": ["Potatoes"],
+    "parsnips": ["Potatoes"],
+    "Zucchini noodles": ["Pasta"],
+    "spaghetti squash": ["Pasta"],
+    "brown rice noodles": ["Pasta"],
+    "Almond milk": ["Milk"],
+    "coconut milk": ["Milk"],
+    "oat milk": ["Milk"],
+    "soy milk": ["Milk"],
+    "Nutritional yeast": ["Cheese"],
+    "vegan cheese": ["Cheese"],
+    "tofu": ["Cheese", "Chicken", "Fish", "Shrimp"],
+    "Turkey": ["Beef", "Pork", "Bacon"],
+    "chicken": ["Beef", "Pork", "Turkey"],
+    "tempeh": ["Beef", "Pork", "Chicken", "Lamb", "Fish", "Shrimp", "Bacon", "Sausage"],
+    "portobello mushrooms": ["Beef", "Pork"],
+    "Grilled eggplant": ["Lamb"],
+    "Tofu": ["Fish", "Shrimp", "Eggs"],
+    "Turkey bacon": ["Bacon"],
+    "tempeh bacon": ["Bacon"],
+    "coconut bacon": ["Bacon"],
+    "Veggie sausage": ["Sausage"],
+    "tempeh sausage": ["Sausage"],
+    "Veggie dogs": ["Hot dogs"],
+    "tofu dogs": ["Hot dogs"],
+    "Lentils": ["Ground beef"],
+    "black beans": ["Ground beef"],
+    "mushrooms": ["Ground beef"],
+    "textured vegetable protein": ["Ground beef"],
+    "chickpea flour": ["Eggs"],
+    "Sea salt": ["Salt"],
+    "pink Himalayan salt": ["Salt"],
+    "herbs and spices": ["Salt"]
+}
+
+MEXICAN_SUBSTITUTIONS = {
+    "Butter": ["Lard"],
+    "Sugar": ["Piloncillo", "honey", "agave nectar"],
+    "White flour": ["Masa harina", "all-purpose flour"],
+    "Sour cream": ["Crema Mexicana"],
+    "Heavy cream": ["Crema Mexicana", "evaporated milk"],
+    "Cream cheese": ["Queso fresco"],
+    "Mayonnaise": ["Sour cream"],
+    "Breadcrumbs": ["Tortilla chips", "cornmeal"],
+    "White rice": ["Spanish rice", "Mexican-style rice"],
+    "Potatoes": ["Sweet potatoes", "yuca"],
+    "Pasta": ["Nopales", "rice noodles"],
+    "Milk": ["Evaporated milk"],
+    "Cheese": ["Queso fresco", "Cotija cheese", "Oaxaca cheese"],
+    "Beef": ["Carne asada", "ground beef"],
+    "Pork": ["Carnitas", "chorizo"],
+    "Chicken": ["Pollo asado", "shredded chicken"],
+    "Lamb": ["Barbacoa"],
+    "Fish": ["Tilapia", "red snapper"],
+    "Shrimp": ["Camarones al ajillo"],
+    "Bacon": ["Chorizo"],
+    "Sausage": ["Chorizo"],
+    "Hot dogs": ["Chorizo"],
+    "Ground beef": ["Picadillo"],
+    "Eggs": ["Huevos rancheros"],
+    "Canola oil": ["Lard", "vegetable oil"],
+    "Salt": ["Sea salt", "pink Himalayan salt", "cilantro", "cumin"]
+}
+
+
 
 GENERAL_INGREDIENTS = [
     "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon",
@@ -131,7 +283,7 @@ GENERAL_INGREDIENTS = [
     "apple cider vinegar", "balsamic vinegar", "red wine vinegar", "white wine vinegar"
 ]
 
-SUBSTITIONS = {
+SUBSTITUTIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
     'baking powder': ['baking soda', 'cream of tartar', 'yeast'],
     'basil': ['oregano', 'thyme'],
@@ -436,8 +588,8 @@ def generate_google(command):
     return "This link should help: " + link
 
 def generate_substitute(ingredient):
-    if ingredient in SUBSTITIONS:
-        for i in SUBSTITIONS[ingredient]:
+    if ingredient in SUBSTITUTIONS:
+        for i in SUBSTITUTIONS[ingredient]:
             print(i)
     else:
         print(generate_google('what is a substitute for ' + str(ingredient)))
@@ -510,8 +662,8 @@ def remy(rec):
             for i in r.ingredients:
                 if i in command:
                     notfound = False
-                    if i in SUBSTITIONS:
-                        subs = ", ".join(SUBSTITIONS[i])
+                    if i in SUBSTITUTIONS:
+                        subs = ", ".join(SUBSTITUTIONS[i])
                         print('You can substitute', subs, 'for', i)
                     else:
                         print(generate_google('substitute ingredient for '+i))
@@ -532,7 +684,7 @@ def RecipeDaddy():
     print('Looks like we are making',r.name)
     valid = True
     while valid:
-        print('Would you like to [1] go over the ingredients or [2] jump right into the cooking steps?')
+        print('Would you like to [1] go over the ingredients or [2] jump right into the cooking steps or [3] transform the recipe?')
         choice = input()
         if choice == 'exit' or choice == 'stop' or choice =='quit':
             valid = False
@@ -548,6 +700,10 @@ def RecipeDaddy():
         elif choice == '2':
             valid = False
             remy(r)
+
+        elif choice == '3':
+            transformRecipe(r)
+
         else:
             print('Hmm I do not understand what you want me to do')
     
@@ -609,8 +765,6 @@ def getTemperature(text1):
     else:
         return generate_google('what temperature should i '+str(text))
 
-#RecipeDaddy()
-
 def vegTransform(rec):
     r = rec
     ingreds = list(r.ingredients.keys())
@@ -618,7 +772,7 @@ def vegTransform(rec):
     meat_change = []
     for i in ingreds:
         if i in MEAT_INGREDIENTS:
-            name = VEGETARIAN_SUBSTITIONS[i]
+            name = VEGETARIAN_SUBSTITUTIONS[i]
             changed_ingredients[name] = r.ingredients[i]
             meat_change.append(i)
         else:
@@ -630,14 +784,57 @@ def vegTransform(rec):
         curr = i
         for ing in meat_change:
             if ing in i:
-                veg = VEGETARIAN_SUBSTITIONS[ing]
+                veg = VEGETARIAN_SUBSTITUTIONS[ing]
                 curr = i.lower().replace(ing,veg)
         newsteps.append(curr)
     r.ingredients = changed_ingredients
     r.steps = newsteps
     return r
 
+def nonvegTransform(rec):
+    r = rec
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    meat_change = []
+    sub = {}
+    for i in ingreds:
+        if i in VEGETARIAN_INGREDIENTS:
+            name = NON_VEGETARIAN_SUBSTITUTIONS[i]
+            print('Found the following substitutions for',i)
+            print(name)
+            c = input('Which would you like to use? ')
+            changed_ingredients[c] = r.ingredients[i]
+            meat_change.append(i)
+            sub[i] = c
+        else:
+            changed_ingredients[i] = r.ingredients[i]
 
-rec = generate_recipe('https://www.allrecipes.com/recipe/228285/teriyaki-salmon/')
-#rec = vegTransform(rec)
+    steps = r.steps
+    newsteps = []
+    for i in steps:
+        curr = i
+        for ing in meat_change:
+            if ing in i:
+                veg = sub[ing]
+                curr = i.lower().replace(ing,veg)
+        newsteps.append(curr)
+    r.ingredients = changed_ingredients
+    r.steps = newsteps
+    return r 
+
+choiceToTransformation = {'1' : ''}
+
+    
+def transformRecipe(r):
+    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free")
+    choice = input()
+
+    if choice == '1':
+
+
+    print("Recipe transformed to ")
+
+rec = generate_recipe('https://www.allrecipes.com/recipe/244716/shirataki-meatless-meat-pad-thai/')
+rec = nonvegTransform(rec)
 rec.printinfo(rec)
+# RecipeDaddy()
