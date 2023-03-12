@@ -25,7 +25,7 @@ MEAT_INGREDIENTS = ["beef", "pork", "chicken", "lamb", "venison", "turkey", "duc
   "bison burgers", "bison ribeye", "bison tenderloin", "kangaroo burgers", "kangaroo loin", "buffalo burgers",
    "buffalo ribeye", "buffalo tenderloin"]
 
-VEGETARIAN_SUBSTITUTIONS = substitutions = {
+VEGETARIAN_SUBSTITIONS = substitutions = {
     "beef": "mushrooms",
     "pork": "jackfruit",
     "chicken": "tofu",
@@ -287,7 +287,7 @@ GENERAL_INGREDIENTS = [
     "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh",
     "onion", "garlic", "ginger", "carrot", "celery", "potato", "sweet potato",
     "broccoli", "cauliflower", "spinach", "kale", "arugula", "lettuce",
-    "tomato paste", "tomatoes", "cucumber", "bell pepper", "chili pepper", "mushroom",
+    "tomato", "cucumber", "bell pepper", "chili pepper", "mushroom",
     "rice", "quinoa", "pasta", "bread", "flour", "sugar", "salt", "pepper",
     "olive oil", "vegetable oil", "coconut oil", "sesame oil", "peanut oil",
     "soy sauce", "teriyaki sauce", "fish sauce", "oyster sauce", "hoisin sauce",
@@ -295,7 +295,7 @@ GENERAL_INGREDIENTS = [
     "mustard", "ketchup", "mayonnaise", "sour cream", "cream cheese", "butter",
     "cheddar cheese", "parmesan cheese", "feta cheese", "mozzarella cheese",
     "milk", "yogurt", "egg", "baking powder", "baking soda", "yeast",
-    "cumin", "coriander", "paprika", "cinnamon", "nutmeg",
+    "cumin", "coriander", "paprika", "cinnamon", "nutmeg", "cloves",
     "chili powder", "curry powder", "garam masala", "turmeric", "bay leaves",
     "thyme", "rosemary", "basil", "oregano", "parsley", "cilantro",
     "lemon", "lime", "orange", "grapefruit", "apple", "banana", "avocado",
@@ -308,7 +308,7 @@ GENERAL_INGREDIENTS = [
     "apple cider vinegar", "balsamic vinegar", "red wine vinegar", "white wine vinegar"
 ]
 
-SUBSTITUTIONS = {
+SUBSTITIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
     'baking powder': ['baking soda', 'cream of tartar', 'yeast'],
     'basil': ['oregano', 'thyme'],
@@ -547,54 +547,16 @@ def ingredientHelper(lststr):
         match4 = pattern4.match(i)
         match5 = pattern5.match(i)
         match6 = pattern6.match(i)
-        pattern_isnumber = re.compile(r'.*(/d+).*')
-        pattern_decimal = re.compile(r'.*(/d+././d+).*')
         if match1:
-            ing = match1.group(2)
-            amt = match1.group(1)
             if found:
-                ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
+                outdict[rep] = match1.group(1)
             else:
-                outdict[ing] = amt
+                outdict[match1.group(2)] = match1.group(1)
         elif match2:
-            ing = match2.group(2)
-            amt = match2.group(1)
             if found:
-                ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
+                outdict[rep] = match2.group(1)
             else:
-                outdict[ing] = amt
+                outdict[match2.group(2)] = match2.group(1)
         elif match3:
             item = match3.group(1)
             q = match3.group(2)
@@ -607,53 +569,15 @@ def ingredientHelper(lststr):
             else:
                 outdict[item] = q
         elif match4:
-            ing = match4.group(2)
-            amt = match4.group(1)
             if found:
-                ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    print('test')
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    print('test')
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
+                outdict[rep] = match4.group(1)
             else:
-                outdict[ing] = amt
+                outdict[match4.group(2)] = match4.group(1)
         elif match5:
-            ing = match5.group(2)
-            amt = match5.group(1)
             if found:
-                ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
+                outdict[rep] = match5.group(1)
             else:
-                outdict[ing] = amt
+                outdict[match5.group(2)] = match5.group(1)
         elif match6:
             parts = i.split()
             # Convert the first two parts to floats and add them together
@@ -661,28 +585,10 @@ def ingredientHelper(lststr):
             # Combine the total with the rest of the string
             i = f"{total} {' '.join(parts[2:])}"
             newmatch = pattern5.match(i)
-            ing = newmatch.group(2)
-            amt = newmatch.group(1)
             if found:
-                ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
+                outdict[rep] = newmatch.group(1) 
             else:
-                outdict[ing] = amt
+                outdict[newmatch.group(2)] = newmatch.group(1) 
     return outdict
 
 def generate_recipe(url):
@@ -707,8 +613,8 @@ def generate_google(command):
     return "This link should help: " + link
 
 def generate_substitute(ingredient):
-    if ingredient in SUBSTITUTIONS:
-        for i in SUBSTITUTIONS[ingredient]:
+    if ingredient in SUBSTITIONS:
+        for i in SUBSTITIONS[ingredient]:
             print(i)
     else:
         print(generate_google('what is a substitute for ' + str(ingredient)))
@@ -781,8 +687,8 @@ def remy(rec):
             for i in r.ingredients:
                 if i in command:
                     notfound = False
-                    if i in SUBSTITUTIONS:
-                        subs = ", ".join(SUBSTITUTIONS[i])
+                    if i in SUBSTITIONS:
+                        subs = ", ".join(SUBSTITIONS[i])
                         print('You can substitute', subs, 'for', i)
                     else:
                         print(generate_google('substitute ingredient for '+i))
@@ -803,7 +709,7 @@ def RecipeDaddy():
     print('Looks like we are making',r.name)
     valid = True
     while valid:
-        print('Would you like to [1] go over the ingredients, [2] jump right into the cooking steps, or [3] transform the recipe?')
+        print('Would you like to [1] go over the ingredients or [2] jump right into the cooking steps or [3] transform the recipe?')
         choice = input()
         if choice == 'exit' or choice == 'stop' or choice =='quit':
             valid = False
@@ -821,7 +727,8 @@ def RecipeDaddy():
             remy(r)
 
         elif choice == '3':
-            r = transformRecipe(r)
+            transformRecipe(r)
+
         else:
             print('Hmm I do not understand what you want me to do')
     
@@ -890,7 +797,7 @@ def vegTransform(rec):
     meat_change = []
     for i in ingreds:
         if i in MEAT_INGREDIENTS:
-            name = VEGETARIAN_SUBSTITUTIONS[i]
+            name = VEGETARIAN_SUBSTITIONS[i]
             changed_ingredients[name] = r.ingredients[i]
             meat_change.append(i)
         else:
@@ -902,44 +809,13 @@ def vegTransform(rec):
         curr = i
         for ing in meat_change:
             if ing in i:
-                veg = VEGETARIAN_SUBSTITUTIONS[ing]
+                veg = VEGETARIAN_SUBSTITIONS[ing]
                 curr = i.lower().replace(ing,veg)
         newsteps.append(curr)
     r.ingredients = changed_ingredients
     r.steps = newsteps
     return r
 
-def nonvegTransform(rec):
-    r = rec
-    ingreds = list(r.ingredients.keys())
-    changed_ingredients = {}
-    meat_change = []
-    sub = {}
-    for i in ingreds:
-        if i in VEGETARIAN_INGREDIENTS:
-            name = NON_VEGETARIAN_SUBSTITUTIONS[i]
-            print('Found the following substitutions for',i)
-            print(name)
-            c = input('Which would you like to use? ')
-            changed_ingredients[c] = r.ingredients[i]
-            meat_change.append(i)
-            sub[i] = c
-        else:
-            changed_ingredients[i] = r.ingredients[i]
-
-    steps = r.steps
-    newsteps = []
-    for i in steps:
-        curr = i
-        for ing in meat_change:
-            if ing in i:
-                veg = sub[ing]
-                curr = i.lower().replace(ing,veg)
-        newsteps.append(curr)
-    r.ingredients = changed_ingredients
-    r.steps = newsteps
-    return r 
-    
 def my_is_numeric(s):
     # returns true for numbers, including decimals
     try:
@@ -1022,22 +898,30 @@ def healthyTransform(r):
 
     return r
 
+def lactoseFree(r):
+    return r
+
+def glutenFree(r):
+    return r
+
 # doubling a recipe:
 # multiply base ingredients by 2
 # multiply spices and alcohols by 1.5
 # size up pot/pan
-# if you cannot increase pot/pan, multiply cooking time by 1.1
+# if you cannot increase pot/pan, multiply cooking time by 1.1h
+def scaleTransform(r):
+    return r
 
-choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free'}
+choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
     
 def transformRecipe(r):
-    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free")
+    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free, [8] scale")
     choice = input()
 
     if choice == '1':
         r = vegTransform(r)
     elif choice == '2':
-        r = nonvegTransform(r)
+        pass
     elif choice == '3':
         r = healthyTransform(r)
     elif choice == '4':
@@ -1045,14 +929,16 @@ def transformRecipe(r):
     elif choice == '5':
         pass
     elif choice == '6':
-        pass
+        r = lactoseFree(r)
     elif choice == '7':
-        pass
+        r = glutenFree(r)
+    elif choice == '8':
+        r = scaleTransform(r)
 
     print("Recipe transformed " + choiceToTransformation[choice])
-    return r
 
-rec = generate_recipe('https://www.allrecipes.com/recipe/16167/beef-bourguignon-i/')
-#rec = nonvegTransform(rec)
-rec.printinfo(rec)
-# RecipeDaddy()
+#rec = generate_recipe('https://www.allrecipes.com/recipe/24074/alysias-basic-meat-lasagna/')
+#rec = vegTransform(rec)
+#rec.printinfo(rec)
+
+RecipeDaddy()
