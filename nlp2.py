@@ -638,6 +638,6 @@ def vegTransform(rec):
     return r
 
 
-rec = generate_recipe('https://www.allrecipes.com/recipe/24074/alysias-basic-meat-lasagna/')
-rec = vegTransform(rec)
+rec = generate_recipe('https://www.allrecipes.com/recipe/228285/teriyaki-salmon/')
+#rec = vegTransform(rec)
 rec.printinfo(rec)
