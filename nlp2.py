@@ -282,12 +282,12 @@ LACTOSE_SUBSTITUTIONS = {
 
 
 
-GENERAL_INGREDIENTS = [
-    "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon",
-    "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh",
+GENERAL_INGREDIENTS1 = ["beef chuck roast", "beef broth", "garlic powder", "black peppercorn", "peppercorn", "jalapeno pepper",
+    "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon", "chicken bouillon",
+    "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh", "chicken broth",
     "onion", "garlic", "ginger", "carrot", "celery", "potato", "sweet potato",
     "broccoli", "cauliflower", "spinach", "kale", "arugula", "lettuce",
-    "tomato", "cucumber", "bell pepper", "chili pepper", "mushroom",
+    "tomato paste", "tomato", "cucumber", "green bell pepper", "bell pepper", "chili pepper", "mushroom",
     "rice", "quinoa", "pasta", "bread", "flour", "sugar", "salt", "pepper",
     "olive oil", "vegetable oil", "coconut oil", "sesame oil", "peanut oil",
     "soy sauce", "teriyaki sauce", "fish sauce", "oyster sauce", "hoisin sauce",
@@ -307,6 +307,7 @@ GENERAL_INGREDIENTS = [
     "lemon juice", "lime juice", "orange juice", "cranberry juice", "grape juice",
     "apple cider vinegar", "balsamic vinegar", "red wine vinegar", "white wine vinegar"
 ]
+GENERAL_INGREDIENTS = sorted(GENERAL_INGREDIENTS1, key=lambda x: len(x), reverse=True)
 
 SUBSTITIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
@@ -495,7 +496,7 @@ def scrape(url_input):
     out = tokenize.sent_tokenize(new_text)
     for i,k in enumerate(out):
         k = k.replace('\n',' ')
-        pattern = re.compile(r'\d+\.\d+.*')
+        pattern = re.compile(r'.*\d+\.\d+.*')
         if not pattern.match(k):
             out[i] = re.sub('\.','', k)
     output = out[1:]
@@ -507,9 +508,10 @@ def ingredientHelper(lststr):
     for i in string_to_tag:
         found = False
         for j in GENERAL_INGREDIENTS:
-            if j in i.lower():
+            if j in i.lower() and not found:
                 found = True
                 rep = j
+                print(rep)
         if ',' in i:
             temp = i.split(',')
             t1 = tokenize.word_tokenize(temp[0])
@@ -549,14 +551,31 @@ def ingredientHelper(lststr):
         match6 = pattern6.match(i)
         if match1:
             if found:
-                outdict[rep] = match1.group(1)
-            else:
-                outdict[match1.group(2)] = match1.group(1)
+                ing = rep
+            if ing in outdict:
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match2:
+            print('d')
+            ing = match2.group(2)
+            amt = match2.group(1)
             if found:
-                outdict[rep] = match2.group(1)
-            else:
-                outdict[match2.group(2)] = match2.group(1)
+                ing = rep
+            if ing in outdict:
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match3:
             item = match3.group(1)
             q = match3.group(2)
@@ -570,14 +589,28 @@ def ingredientHelper(lststr):
                 outdict[item] = q
         elif match4:
             if found:
-                outdict[rep] = match4.group(1)
-            else:
-                outdict[match4.group(2)] = match4.group(1)
+                ing = rep
+            if ing in outdict:
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match5:
             if found:
-                outdict[rep] = match5.group(1)
-            else:
-                outdict[match5.group(2)] = match5.group(1)
+                ing = rep
+            if ing in outdict:
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match6:
             parts = i.split()
             # Convert the first two parts to floats and add them together
@@ -586,9 +619,16 @@ def ingredientHelper(lststr):
             i = f"{total} {' '.join(parts[2:])}"
             newmatch = pattern5.match(i)
             if found:
-                outdict[rep] = newmatch.group(1) 
-            else:
-                outdict[newmatch.group(2)] = newmatch.group(1) 
+                ing = rep
+            if ing in outdict:
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
     return outdict
 
 def generate_recipe(url):
@@ -773,7 +813,7 @@ def printingredients(r):
 
 def getTime(text1):
     text = text1.lower()
-    pat = re.compile(r'.* (\d+) (minutes?|hours?|seconds?)')
+    pat = re.compile(r'.* (\d+) (minutes?|hours?|seconds?|days?)')
     mat = pat.match(text)
     if mat:
         out = str(mat.group(1)) +' '+ str(mat.group(2))
@@ -815,6 +855,37 @@ def vegTransform(rec):
     r.ingredients = changed_ingredients
     r.steps = newsteps
     return r
+
+def nonvegTransform(rec):
+    r = rec
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    meat_change = []
+    sub = {}
+    for i in ingreds:
+        if i in VEGETARIAN_INGREDIENTS:
+            name = NON_VEGETARIAN_SUBSTITUTIONS[i]
+            print('Found the following substitutions for',i)
+            print(name)
+            c = input('Which would you like to use? ')
+            changed_ingredients[c] = r.ingredients[i]
+            meat_change.append(i)
+            sub[i] = c
+        else:
+            changed_ingredients[i] = r.ingredients[i]
+
+    steps = r.steps
+    newsteps = []
+    for i in steps:
+        curr = i
+        for ing in meat_change:
+            if ing in i:
+                veg = sub[ing]
+                curr = i.lower().replace(ing,veg)
+        newsteps.append(curr)
+    r.ingredients = changed_ingredients
+    r.steps = newsteps
+    return r 
 
 def my_is_numeric(s):
     # returns true for numbers, including decimals
@@ -938,8 +1009,7 @@ def transformRecipe(r):
 
     print("Recipe transformed " + choiceToTransformation[choice])
 
-#rec = generate_recipe('https://www.allrecipes.com/recipe/24074/alysias-basic-meat-lasagna/')
-#rec = vegTransform(rec)
-#rec.printinfo(rec)
-
-RecipeDaddy()
+rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
+#rec = nonvegTransform(rec)
+rec.printinfo(rec)
+# RecipeDaddy()
