@@ -226,8 +226,11 @@ UNHEALTHY_SUBSTITUTIONS = {
     "herbs and spices": ["Salt"]
 }
 
-UNHEALTHY_LIST = {"soy sauce", "Butter", "Margarine", "Oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
+UNHEALTHY_LIST = {"soy sauce", "gin", "brandy", "garlic", "pepper", "bacon", "Butter", "Margarine", "Oil", "olive oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
 }
+                  
+HEALTHY_LIST = {"tomato", "mushroom", "carrot", "bay leaf", "spinach", "kale", "garlic", "ginger", "turmeric", "onion", "bell pepper", "broccoli", "cauliflower", "sweet potato", "quinoa", "brown rice", "wild rice", "lentils", "chickpeas", "black beans", "kidney beans", "almonds", "walnuts", "avocado", "greek yogurt", "cottage cheese", "eggs", "salmon", "chicken breast", "turkey breast"}
+
 
 MEXICAN_SUBSTITUTIONS = {
     "Butter": ["Lard"],
@@ -825,20 +828,81 @@ def unhealthyTransform(r):
     for i, val in r.ingredients.items():
         for j in UNHEALTHY_LIST:
             if j.lower() in i:
-                values = val.split(' ')
+                values = val.lower().split(' ')
                 if len(values) > 1:
+                    pluralize = False
                     if "to taste" in val:
-                        pass
+                        r.ingredients[i] = re.sub("to taste", "generously", val)
                     else:
                         if my_is_numeric(values[0]):
+                            if values[0] == '1': pluralize = True
                             r.ingredients[i] = str(2*float(values[0]))
                             for v in values[1:]:
-                                r.ingredients[i] = r.ingredients[i] + v
+                                r.ingredients[i] = r.ingredients[i] + " " + v
+                            if pluralize: r.ingredients[i] = r.ingredients[i] + "s"
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 2*float(val)
+                elif "lightly" in val:
+                    r.ingredients[i] = re.sub("lightly", "generously", val)
+
+        for j in HEALTHY_LIST:
+            if j.lower() in i:
+                values = val.lower().split(' ')               
+                if len(values) > 1:
+                    depluralize = False
+                    if my_is_numeric(values[0]):
+                        if float(values[0]) == 2.0: depluralize = True
+                        r.ingredients[i] = str(0.5*float(values[0]))
+                        for v in values[1:]:
+                            r.ingredients[i] = r.ingredients[i] + " " + v
+                        if depluralize: r.ingredients[i] = r.ingredients[i][:-1]
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 0.5*float(val)
+
+    return r
+
+def healthyTransform(r):
+    for i, val in r.ingredients.items():
+        for j in UNHEALTHY_LIST:
+            if j.lower() in i:
+                values = val.lower().split(' ')
+                if len(values) > 1:
+                    depluralize = False
+                    if "to taste" in val:
+                        r.ingredients[i] = re.sub("to taste", "lightly", val)
+                    else:
+                        if my_is_numeric(values[0]):
+                            if float(values[0]) == 2.0: depluralize = True
+                            r.ingredients[i] = str(0.5*float(values[0]))
+                            for v in values[1:]:
+                                r.ingredients[i] = r.ingredients[i] + " " + v
+                            if depluralize: r.ingredients[i] = r.ingredients[i][:-1]
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 0.5*float(val)
+                elif "generously" in val:
+                    r.ingredients[i] = re.sub("generously", "lightly", val)
+
+        for j in HEALTHY_LIST:
+            if j.lower() in i:
+                values = val.lower().split(' ')               
+                if len(values) > 1:
+                    pluralize = False
+                    if my_is_numeric(values[0]):
+                        if values[0] == '1': pluralize = True
+                        r.ingredients[i] = str(2*float(values[0]))
+                        for v in values[1:]:
+                            r.ingredients[i] = r.ingredients[i] + " " + v
+                        if pluralize: r.ingredients[i] = r.ingredients[i] + "s"
                 elif len(values) == 1 and my_is_numeric(values[0]):
                     r.ingredients[i] = 2*float(val)
 
     return r
 
+# doubling a recipe:
+# multiply base ingredients by 2
+# multiply spices and alcohols by 1.5
+# size up pot/pan
+# if you cannot increase pot/pan, multiply cooking time by 1.1
 
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free'}
     
@@ -851,7 +915,7 @@ def transformRecipe(r):
     elif choice == '2':
         pass
     elif choice == '3':
-        pass
+        r = healthyTransform(r)
     elif choice == '4':
         r = unhealthyTransform(r)
     elif choice == '5':
