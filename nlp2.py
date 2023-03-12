@@ -226,6 +226,9 @@ UNHEALTHY_SUBSTITUTIONS = {
     "herbs and spices": ["Salt"]
 }
 
+UNHEALTHY_LIST = {"Butter", "Margarine", "Oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
+}
+
 MEXICAN_SUBSTITUTIONS = {
     "Butter": ["Lard"],
     "Sugar": ["Piloncillo", "honey", "agave nectar"],
@@ -253,6 +256,25 @@ MEXICAN_SUBSTITUTIONS = {
     "Eggs": ["Huevos rancheros"],
     "Canola oil": ["Lard", "vegetable oil"],
     "Salt": ["Sea salt", "pink Himalayan salt", "cilantro", "cumin"]
+}
+
+LACTOSE_SUBSTITUTIONS = {
+    "Milk": ["Almond milk", "Coconut milk", "Soy milk", "Oat milk", "Rice milk", "Hemp milk", "Cashew milk"],
+    "Butter": ["Vegan butter", "Coconut oil", "Olive oil", "Canola oil", "Sunflower oil", "Vegetable oil", "Avocado oil"],
+    "Cheese": ["Vegan cheese", "Nutritional yeast", "Tofu", "Cashew cheese", "Coconut cheese", "Soy cheese"],
+    "Cream": ["Coconut cream", "Soy cream", "Almond cream", "Cashew cream"],
+    "Sour cream": ["Coconut cream", "Soy cream", "Almond cream"],
+    "Yogurt": ["Soy yogurt", "Almond yogurt", "Coconut yogurt"],
+    "Whey protein": ["Soy protein", "Pea protein", "Hemp protein", "Rice protein"],
+    "Cream cheese": ["Vegan cream cheese", "Tofu cream cheese", "Cashew cream cheese"],
+    "Ice cream": ["Non-dairy ice cream", "Soy ice cream", "Coconut ice cream", "Almond ice cream"],
+    "Condensed milk": ["Coconut condensed milk", "Soy condensed milk", "Almond condensed milk"],
+    "Evaporated milk": ["Coconut milk", "Soy milk", "Almond milk"],
+    "Whipped cream": ["Coconut whipped cream", "Soy whipped cream", "Cashew whipped cream"],
+    "Half-and-half": ["Coconut cream", "Soy cream", "Almond cream"],
+    "Ghee": ["Coconut oil", "Olive oil", "Canola oil", "Sunflower oil", "Vegetable oil", "Avocado oil"],
+    "Casein": ["Soy protein", "Pea protein", "Hemp protein", "Rice protein"],
+    "Lactose": ["Glucose syrup", "Maple syrup", "Corn syrup", "Dextrose", "Maltodextrin"]
 }
 
 
@@ -793,6 +815,25 @@ def vegTransform(rec):
     r.steps = newsteps
     return r
 
+def unhealthyTransform(r):
+    change = []
+    ingredients = list(r.ingredients.keys())
+    for i in ingredients:
+        for j in UNHEALTHY_LIST:
+            if j.lower() in i:
+                change.append(r.ingredients[i])
+
+    # find numeric, multiply it
+    numeric_values = []
+
+    for m in change:
+        if isinstance(m, str):
+            match = re.search(r'\d+\.?\d*', m)
+            if match:
+                numeric_values.append(float(match.group()))
+        elif isinstance(m, (int, float)):
+                numeric_values.append(float(m))
+
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free'}
     
 def transformRecipe(r):
@@ -806,7 +847,7 @@ def transformRecipe(r):
     elif choice == '3':
         pass
     elif choice == '4':
-        pass
+        r = unhealthyTransform(r)
     elif choice == '5':
         pass
     elif choice == '6':
