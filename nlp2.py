@@ -793,17 +793,28 @@ def vegTransform(rec):
     r.steps = newsteps
     return r
 
-choiceToTransformation = {'1' : ''}
-
+choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free'}
     
 def transformRecipe(r):
     print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free")
     choice = input()
 
     if choice == '1':
+        r = vegTransform(r)
+    elif choice == '2':
+        pass
+    elif choice == '3':
+        pass
+    elif choice == '4':
+        pass
+    elif choice == '5':
+        pass
+    elif choice == '6':
+        pass
+    elif choice == '7':
+        pass
 
-
-    print("Recipe transformed to ")
+    print("Recipe transformed " + choiceToTransformation[choice])
 
 rec = generate_recipe('https://www.allrecipes.com/recipe/24074/alysias-basic-meat-lasagna/')
 rec = vegTransform(rec)
