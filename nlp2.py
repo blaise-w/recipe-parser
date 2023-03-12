@@ -25,7 +25,7 @@ MEAT_INGREDIENTS = ["beef", "pork", "chicken", "lamb", "venison", "turkey", "duc
   "bison burgers", "bison ribeye", "bison tenderloin", "kangaroo burgers", "kangaroo loin", "buffalo burgers",
    "buffalo ribeye", "buffalo tenderloin"]
 
-VEGETARIAN_SUBSTITUTIONS = substitutions = {
+VEGETARIAN_SUBSTITIONS = substitutions = {
     "beef": "mushrooms",
     "pork": "jackfruit",
     "chicken": "tofu",
@@ -226,8 +226,11 @@ UNHEALTHY_SUBSTITUTIONS = {
     "herbs and spices": ["Salt"]
 }
 
-UNHEALTHY_LIST = {"soy sauce", "Butter", "Margarine", "Oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
+UNHEALTHY_LIST = {"soy sauce", "gin", "brandy", "garlic", "pepper", "bacon", "Butter", "Margarine", "Oil", "olive oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
 }
+                  
+HEALTHY_LIST = {"tomato", "mushroom", "carrot", "bay leaf", "spinach", "kale", "garlic", "ginger", "turmeric", "onion", "bell pepper", "broccoli", "cauliflower", "sweet potato", "quinoa", "brown rice", "wild rice", "lentils", "chickpeas", "black beans", "kidney beans", "almonds", "walnuts", "avocado", "greek yogurt", "cottage cheese", "eggs", "salmon", "chicken breast", "turkey breast"}
+
 
 MEXICAN_SUBSTITUTIONS = {
     "Butter": ["Lard"],
@@ -292,7 +295,7 @@ GENERAL_INGREDIENTS1 = ["beef chuck roast", "beef broth", "garlic powder", "blac
     "mustard", "ketchup", "mayonnaise", "sour cream", "cream cheese", "butter",
     "cheddar cheese", "parmesan cheese", "feta cheese", "mozzarella cheese",
     "milk", "yogurt", "egg", "baking powder", "baking soda", "yeast",
-    "cumin", "coriander", "paprika", "cinnamon", "nutmeg",
+    "cumin", "coriander", "paprika", "cinnamon", "nutmeg", "cloves",
     "chili powder", "curry powder", "garam masala", "turmeric", "bay leaves",
     "thyme", "rosemary", "basil", "oregano", "parsley", "cilantro",
     "lemon", "lime", "orange", "grapefruit", "apple", "banana", "avocado",
@@ -306,7 +309,7 @@ GENERAL_INGREDIENTS1 = ["beef chuck roast", "beef broth", "garlic powder", "blac
 ]
 GENERAL_INGREDIENTS = sorted(GENERAL_INGREDIENTS1, key=lambda x: len(x), reverse=True)
 
-SUBSTITUTIONS = {
+SUBSTITIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
     'baking powder': ['baking soda', 'cream of tartar', 'yeast'],
     'basil': ['oregano', 'thyme'],
@@ -546,11 +549,7 @@ def ingredientHelper(lststr):
         match4 = pattern4.match(i)
         match5 = pattern5.match(i)
         match6 = pattern6.match(i)
-        pattern_isnumber = re.compile(r'.*(/d+).*')
-        pattern_decimal = re.compile(r'.*(/d+././d+).*')
         if match1:
-            ing = match1.group(2)
-            amt = match1.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -589,8 +588,6 @@ def ingredientHelper(lststr):
             else:
                 outdict[item] = q
         elif match4:
-            ing = match4.group(2)
-            amt = match4.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -603,8 +600,6 @@ def ingredientHelper(lststr):
                         amt = f"{prevnum} {' '.join(prevamt[1:])}"
             outdict[ing] = amt
         elif match5:
-            ing = match5.group(2)
-            amt = match5.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -623,8 +618,6 @@ def ingredientHelper(lststr):
             # Combine the total with the rest of the string
             i = f"{total} {' '.join(parts[2:])}"
             newmatch = pattern5.match(i)
-            ing = newmatch.group(2)
-            amt = newmatch.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -660,8 +653,8 @@ def generate_google(command):
     return "This link should help: " + link
 
 def generate_substitute(ingredient):
-    if ingredient in SUBSTITUTIONS:
-        for i in SUBSTITUTIONS[ingredient]:
+    if ingredient in SUBSTITIONS:
+        for i in SUBSTITIONS[ingredient]:
             print(i)
     else:
         print(generate_google('what is a substitute for ' + str(ingredient)))
@@ -734,8 +727,8 @@ def remy(rec):
             for i in r.ingredients:
                 if i in command:
                     notfound = False
-                    if i in SUBSTITUTIONS:
-                        subs = ", ".join(SUBSTITUTIONS[i])
+                    if i in SUBSTITIONS:
+                        subs = ", ".join(SUBSTITIONS[i])
                         print('You can substitute', subs, 'for', i)
                     else:
                         print(generate_google('substitute ingredient for '+i))
@@ -756,7 +749,7 @@ def RecipeDaddy():
     print('Looks like we are making',r.name)
     valid = True
     while valid:
-        print('Would you like to [1] go over the ingredients, [2] jump right into the cooking steps, or [3] transform the recipe?')
+        print('Would you like to [1] go over the ingredients or [2] jump right into the cooking steps or [3] transform the recipe?')
         choice = input()
         if choice == 'exit' or choice == 'stop' or choice =='quit':
             valid = False
@@ -774,7 +767,8 @@ def RecipeDaddy():
             remy(r)
 
         elif choice == '3':
-            r = transformRecipe(r)
+            transformRecipe(r)
+
         else:
             print('Hmm I do not understand what you want me to do')
     
@@ -843,7 +837,7 @@ def vegTransform(rec):
     meat_change = []
     for i in ingreds:
         if i in MEAT_INGREDIENTS:
-            name = VEGETARIAN_SUBSTITUTIONS[i]
+            name = VEGETARIAN_SUBSTITIONS[i]
             changed_ingredients[name] = r.ingredients[i]
             meat_change.append(i)
         else:
@@ -855,7 +849,7 @@ def vegTransform(rec):
         curr = i
         for ing in meat_change:
             if ing in i:
-                veg = VEGETARIAN_SUBSTITUTIONS[ing]
+                veg = VEGETARIAN_SUBSTITIONS[ing]
                 curr = i.lower().replace(ing,veg)
         newsteps.append(curr)
     r.ingredients = changed_ingredients
@@ -905,44 +899,114 @@ def unhealthyTransform(r):
     for i, val in r.ingredients.items():
         for j in UNHEALTHY_LIST:
             if j.lower() in i:
-                values = val.split(' ')
+                values = val.lower().split(' ')
                 if len(values) > 1:
+                    pluralize = False
                     if "to taste" in val:
-                        pass
+                        r.ingredients[i] = re.sub("to taste", "generously", val)
                     else:
                         if my_is_numeric(values[0]):
+                            if values[0] == '1': pluralize = True
                             r.ingredients[i] = str(2*float(values[0]))
                             for v in values[1:]:
-                                r.ingredients[i] = r.ingredients[i] + v
+                                r.ingredients[i] = r.ingredients[i] + " " + v
+                            if pluralize: r.ingredients[i] = r.ingredients[i] + "s"
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 2*float(val)
+                elif "lightly" in val:
+                    r.ingredients[i] = re.sub("lightly", "generously", val)
+
+        for j in HEALTHY_LIST:
+            if j.lower() in i:
+                values = val.lower().split(' ')               
+                if len(values) > 1:
+                    depluralize = False
+                    if my_is_numeric(values[0]):
+                        if float(values[0]) == 2.0: depluralize = True
+                        r.ingredients[i] = str(0.5*float(values[0]))
+                        for v in values[1:]:
+                            r.ingredients[i] = r.ingredients[i] + " " + v
+                        if depluralize: r.ingredients[i] = r.ingredients[i][:-1]
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 0.5*float(val)
+
+    return r
+
+def healthyTransform(r):
+    for i, val in r.ingredients.items():
+        for j in UNHEALTHY_LIST:
+            if j.lower() in i:
+                values = val.lower().split(' ')
+                if len(values) > 1:
+                    depluralize = False
+                    if "to taste" in val:
+                        r.ingredients[i] = re.sub("to taste", "lightly", val)
+                    else:
+                        if my_is_numeric(values[0]):
+                            if float(values[0]) == 2.0: depluralize = True
+                            r.ingredients[i] = str(0.5*float(values[0]))
+                            for v in values[1:]:
+                                r.ingredients[i] = r.ingredients[i] + " " + v
+                            if depluralize: r.ingredients[i] = r.ingredients[i][:-1]
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 0.5*float(val)
+                elif "generously" in val:
+                    r.ingredients[i] = re.sub("generously", "lightly", val)
+
+        for j in HEALTHY_LIST:
+            if j.lower() in i:
+                values = val.lower().split(' ')               
+                if len(values) > 1:
+                    pluralize = False
+                    if my_is_numeric(values[0]):
+                        if values[0] == '1': pluralize = True
+                        r.ingredients[i] = str(2*float(values[0]))
+                        for v in values[1:]:
+                            r.ingredients[i] = r.ingredients[i] + " " + v
+                        if pluralize: r.ingredients[i] = r.ingredients[i] + "s"
                 elif len(values) == 1 and my_is_numeric(values[0]):
                     r.ingredients[i] = 2*float(val)
 
     return r
 
+def lactoseFree(r):
+    return r
 
-choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free'}
+def glutenFree(r):
+    return r
+
+# doubling a recipe:
+# multiply base ingredients by 2
+# multiply spices and alcohols by 1.5
+# size up pot/pan
+# if you cannot increase pot/pan, multiply cooking time by 1.1h
+def scaleTransform(r):
+    return r
+
+choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
     
 def transformRecipe(r):
-    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free")
+    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free, [8] scale")
     choice = input()
 
     if choice == '1':
         r = vegTransform(r)
     elif choice == '2':
-        r = nonvegTransform(r)
-    elif choice == '3':
         pass
+    elif choice == '3':
+        r = healthyTransform(r)
     elif choice == '4':
         r = unhealthyTransform(r)
     elif choice == '5':
         pass
     elif choice == '6':
-        pass
+        r = lactoseFree(r)
     elif choice == '7':
-        pass
+        r = glutenFree(r)
+    elif choice == '8':
+        r = scaleTransform(r)
 
     print("Recipe transformed " + choiceToTransformation[choice])
-    return r
 
 rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
