@@ -992,7 +992,7 @@ def transformRecipe(r):
     if choice == '1':
         r = vegTransform(r)
     elif choice == '2':
-        pass
+        r = nonvegTransform(r)
     elif choice == '3':
         r = healthyTransform(r)
     elif choice == '4':
