@@ -226,7 +226,7 @@ UNHEALTHY_SUBSTITUTIONS = {
     "herbs and spices": ["Salt"]
 }
 
-UNHEALTHY_LIST = {"Butter", "Margarine", "Oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
+UNHEALTHY_LIST = {"soy sauce", "Butter", "Margarine", "Oil", "Vegetable Oil", "Canola Oil", "Corn Syrup", "Sugar", "Brown Sugar", "Powdered Sugar", "Molasses", "Honey", "Stevia", "Artificial Sweetener", "Flour", "White Flour", "Bleached Flour", "All-Purpose Flour", "Cake Flour", "Self-Rising Flour", "Breadcrumbs", "Baking Powder", "Baking Soda", "Salt", "Soy Sauce", "Worcestershire Sauce", "Ketchup", "Mayonnaise", "Cream", "Sour Cream", "Cream Cheese", "Cheese", "Heavy Cream", "Whipped Cream", "Ice Cream", "Half-and-Half", "Milk", "Evaporated Milk", "Sweetened Condensed Milk", "Canned Fruit", "Canned Vegetables", "Bacon", "Sausage", "Hot Dogs", "Jerky", "Beef", "Alcohol", "Wine"
 }
 
 MEXICAN_SUBSTITUTIONS = {
@@ -936,25 +936,33 @@ def nonvegTransform(rec):
     r.ingredients = changed_ingredients
     r.steps = newsteps
     return r 
+    
+def my_is_numeric(s):
+    # returns true for numbers, including decimals
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 def unhealthyTransform(r):
-    change = []
-    ingredients = list(r.ingredients.keys())
-    for i in ingredients:
+    for i, val in r.ingredients.items():
         for j in UNHEALTHY_LIST:
             if j.lower() in i:
-                change.append(r.ingredients[i])
+                values = val.split(' ')
+                if len(values) > 1:
+                    if "to taste" in val:
+                        pass
+                    else:
+                        if my_is_numeric(values[0]):
+                            r.ingredients[i] = str(2*float(values[0]))
+                            for v in values[1:]:
+                                r.ingredients[i] = r.ingredients[i] + v
+                elif len(values) == 1 and my_is_numeric(values[0]):
+                    r.ingredients[i] = 2*float(val)
 
-    # find numeric, multiply it
-    numeric_values = []
+    return r
 
-    for m in change:
-        if isinstance(m, str):
-            match = re.search(r'\d+\.?\d*', m)
-            if match:
-                numeric_values.append(float(match.group()))
-        elif isinstance(m, (int, float)):
-                numeric_values.append(float(m))
 
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free'}
     
