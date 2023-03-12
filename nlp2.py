@@ -765,20 +765,32 @@ def getTemperature(text1):
     else:
         return generate_google('what temperature should i '+str(text))
 
-RecipeDaddy()
+#RecipeDaddy()
 
 def vegTransform(rec):
     r = rec
     ingreds = list(r.ingredients.keys())
     changed_ingredients = {}
+    meat_change = []
     for i in ingreds:
         if i in MEAT_INGREDIENTS:
             name = VEGETARIAN_SUBSTITIONS[i]
             changed_ingredients[name] = r.ingredients[i]
+            meat_change.append(i)
         else:
             changed_ingredients[i] = r.ingredients[i]
 
+    steps = r.steps
+    newsteps = []
+    for i in steps:
+        curr = i
+        for ing in meat_change:
+            if ing in i:
+                veg = VEGETARIAN_SUBSTITIONS[ing]
+                curr = i.lower().replace(ing,veg)
+        newsteps.append(curr)
     r.ingredients = changed_ingredients
+    r.steps = newsteps
     return r
 
 choiceToTransformation = {'1' : ''}
@@ -792,3 +804,7 @@ def transformRecipe(r):
 
 
     print("Recipe transformed to ")
+
+rec = generate_recipe('https://www.allrecipes.com/recipe/24074/alysias-basic-meat-lasagna/')
+rec = vegTransform(rec)
+rec.printinfo(rec)
