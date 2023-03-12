@@ -279,12 +279,12 @@ LACTOSE_SUBSTITUTIONS = {
 
 
 
-GENERAL_INGREDIENTS = [
-    "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon",
-    "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh",
+GENERAL_INGREDIENTS1 = ["beef chuck roast", "beef broth", "garlic powder", "black peppercorn", "peppercorn", "jalapeno pepper",
+    "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon", "chicken bouillon",
+    "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh", "chicken broth",
     "onion", "garlic", "ginger", "carrot", "celery", "potato", "sweet potato",
     "broccoli", "cauliflower", "spinach", "kale", "arugula", "lettuce",
-    "tomato paste", "tomatoes", "cucumber", "bell pepper", "chili pepper", "mushroom",
+    "tomato paste", "tomato", "cucumber", "green bell pepper", "bell pepper", "chili pepper", "mushroom",
     "rice", "quinoa", "pasta", "bread", "flour", "sugar", "salt", "pepper",
     "olive oil", "vegetable oil", "coconut oil", "sesame oil", "peanut oil",
     "soy sauce", "teriyaki sauce", "fish sauce", "oyster sauce", "hoisin sauce",
@@ -304,6 +304,7 @@ GENERAL_INGREDIENTS = [
     "lemon juice", "lime juice", "orange juice", "cranberry juice", "grape juice",
     "apple cider vinegar", "balsamic vinegar", "red wine vinegar", "white wine vinegar"
 ]
+GENERAL_INGREDIENTS = sorted(GENERAL_INGREDIENTS1, key=lambda x: len(x), reverse=True)
 
 SUBSTITUTIONS = {
     'allspice': ['cinnamon', 'nutmeg', 'clove'],
@@ -492,7 +493,7 @@ def scrape(url_input):
     out = tokenize.sent_tokenize(new_text)
     for i,k in enumerate(out):
         k = k.replace('\n',' ')
-        pattern = re.compile(r'\d+\.\d+.*')
+        pattern = re.compile(r'.*\d+\.\d+.*')
         if not pattern.match(k):
             out[i] = re.sub('\.','', k)
     output = out[1:]
@@ -504,9 +505,10 @@ def ingredientHelper(lststr):
     for i in string_to_tag:
         found = False
         for j in GENERAL_INGREDIENTS:
-            if j in i.lower():
+            if j in i.lower() and not found:
                 found = True
                 rep = j
+                print(rep)
         if ',' in i:
             temp = i.split(',')
             t1 = tokenize.word_tokenize(temp[0])
@@ -552,46 +554,29 @@ def ingredientHelper(lststr):
             if found:
                 ing = rep
             if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
-            else:
-                outdict[ing] = amt
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match2:
+            print('d')
             ing = match2.group(2)
             amt = match2.group(1)
             if found:
                 ing = rep
             if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
-            else:
-                outdict[ing] = amt
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match3:
             item = match3.group(1)
             q = match3.group(2)
@@ -609,48 +594,28 @@ def ingredientHelper(lststr):
             if found:
                 ing = rep
             if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    print('test')
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    print('test')
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
-            else:
-                outdict[ing] = amt
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match5:
             ing = match5.group(2)
             amt = match5.group(1)
             if found:
                 ing = rep
             if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
-            else:
-                outdict[ing] = amt
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
         elif match6:
             parts = i.split()
             # Convert the first two parts to floats and add them together
@@ -663,23 +628,14 @@ def ingredientHelper(lststr):
             if found:
                 ing = rep
             if ing in outdict:
-                prevamt = outdict[ing]
-                matt2 = pattern_isnumber.match(prevamt)
-                matt = pattern_decimal.match(prevamt)
-                if matt:
-                    prevnum = float(matt.group(1))
-                elif matt2:
-                    prevnum = float(matt2.group(1))
-                matt2 = pattern_isnumber.match(amt)
-                matt = pattern_decimal.match(amt)
-                if matt:
-                    prevnum = prevnum + float(matt.group(1))
-                    outdict[ing] = amt
-                elif matt2:
-                    prevnum = prevnum + float(matt2.group(1))
-                    outdict[ing] = amt
-            else:
-                outdict[ing] = amt
+                prevamt = outdict[ing].split(' ')
+                if my_is_numeric(prevamt[0]):
+                    prevnum = float(prevamt[0])
+                    amtsplit = amt.split(' ')
+                    if my_is_numeric(amtsplit[0]):
+                        prevnum = prevnum + float(amtsplit[0])
+                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            outdict[ing] = amt
     return outdict
 
 def generate_recipe(url):
@@ -863,7 +819,7 @@ def printingredients(r):
 
 def getTime(text1):
     text = text1.lower()
-    pat = re.compile(r'.* (\d+) (minutes?|hours?|seconds?)')
+    pat = re.compile(r'.* (\d+) (minutes?|hours?|seconds?|days?)')
     mat = pat.match(text)
     if mat:
         out = str(mat.group(1)) +' '+ str(mat.group(2))
@@ -936,7 +892,7 @@ def nonvegTransform(rec):
     r.ingredients = changed_ingredients
     r.steps = newsteps
     return r 
-    
+
 def my_is_numeric(s):
     # returns true for numbers, including decimals
     try:
@@ -988,7 +944,7 @@ def transformRecipe(r):
     print("Recipe transformed " + choiceToTransformation[choice])
     return r
 
-rec = generate_recipe('https://www.allrecipes.com/recipe/16167/beef-bourguignon-i/')
+rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
 rec.printinfo(rec)
 # RecipeDaddy()
