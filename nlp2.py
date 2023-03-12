@@ -178,7 +178,7 @@ SUBSTITIONS = {
     'tomato sauce': ['salsa', 'marinara sauce'],
     'shallot': ['onion', 'garlic', 'chives'],
     'shrimp': ['prawns', 'scallops', 'crab'],
-    'sour cream': ['Greek yogurt', 'creme fraiche'],
+    'sour cream': ['greek yogurt', 'creme fraiche'],
     'soy sauce': ['fish sauce', 'tamari'],
     'spinach': ['kale', 'arugula', 'collard greens'],
     'sriracha': ['hot sauce', 'red pepper flakes'],
