@@ -909,7 +909,7 @@ def glutenFree(r):
 # multiply spices and alcohols by 1.5
 # size up pot/pan
 # if you cannot increase pot/pan, multiply cooking time by 1.1h
-def scaleTransform(r):
+def scaleTransform(r, scale):
     return r
 
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
@@ -933,7 +933,8 @@ def transformRecipe(r):
     elif choice == '7':
         r = glutenFree(r)
     elif choice == '8':
-        r = scaleTransform(r)
+        print("How much would you like to scale the recipe by?")
+        r = scaleTransform(r, input())
 
     print("Recipe transformed " + choiceToTransformation[choice])
 
