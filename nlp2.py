@@ -374,7 +374,7 @@ SUBSTITIONS = {
     'yellow mustard': ['dijon mustard', 'whole grain mustard']
 }
 
-alcohol = [
+ALCOHOL = [
     "rum", 
     "vodka", 
     "tequila", 
@@ -396,7 +396,7 @@ alcohol = [
     "Limoncello"
 ]
 
-spices = [
+SPICES = [
     "cinnamon", 
     "ginger", 
     "cardamom", 
@@ -555,7 +555,6 @@ def ingredientHelper(lststr):
             if j in i.lower() and not found:
                 found = True
                 rep = j
-                print(rep)
         if ',' in i:
             temp = i.split(',')
             t1 = tokenize.word_tokenize(temp[0])
@@ -598,28 +597,14 @@ def ingredientHelper(lststr):
             amt = match1.group(1)
             if found:
                 ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing].split(' ')
-                if my_is_numeric(prevamt[0]):
-                    prevnum = float(prevamt[0])
-                    amtsplit = amt.split(' ')
-                    if my_is_numeric(amtsplit[0]):
-                        prevnum = prevnum + float(amtsplit[0])
-                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            amt = minihelper(ing,amt,outdict)
             outdict[ing] = amt
         elif match2:
             ing = match2.group(2)
             amt = match2.group(1)
             if found:
                 ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing].split(' ')
-                if my_is_numeric(prevamt[0]):
-                    prevnum = float(prevamt[0])
-                    amtsplit = amt.split(' ')
-                    if my_is_numeric(amtsplit[0]):
-                        prevnum = prevnum + float(amtsplit[0])
-                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            amt = minihelper(ing,amt,outdict)
             outdict[ing] = amt
         elif match3:
             item = match3.group(1)
@@ -637,28 +622,14 @@ def ingredientHelper(lststr):
             amt = match4.group(1)
             if found:
                 ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing].split(' ')
-                if my_is_numeric(prevamt[0]):
-                    prevnum = float(prevamt[0])
-                    amtsplit = amt.split(' ')
-                    if my_is_numeric(amtsplit[0]):
-                        prevnum = prevnum + float(amtsplit[0])
-                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            amt = minihelper(ing,amt,outdict)
             outdict[ing] = amt
         elif match5:
             ing = match5.group(2)
             amt = match5.group(1)
             if found:
                 ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing].split(' ')
-                if my_is_numeric(prevamt[0]):
-                    prevnum = float(prevamt[0])
-                    amtsplit = amt.split(' ')
-                    if my_is_numeric(amtsplit[0]):
-                        prevnum = prevnum + float(amtsplit[0])
-                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            amt = minihelper(ing,amt,outdict)
             outdict[ing] = amt
         elif match6:
             parts = i.split()
@@ -671,16 +642,23 @@ def ingredientHelper(lststr):
             amt = newmatch.group(1)
             if found:
                 ing = rep
-            if ing in outdict:
-                prevamt = outdict[ing].split(' ')
-                if my_is_numeric(prevamt[0]):
-                    prevnum = float(prevamt[0])
-                    amtsplit = amt.split(' ')
-                    if my_is_numeric(amtsplit[0]):
-                        prevnum = prevnum + float(amtsplit[0])
-                        amt = f"{prevnum} {' '.join(prevamt[1:])}"
+            amt = minihelper(ing,amt,outdict)
             outdict[ing] = amt
     return outdict
+
+def minihelper(ingred,amount,dic):
+    ing = ingred
+    amt = amount
+    outdict = dic
+    if ing in outdict:
+        prevamt = outdict[ing].split(' ')
+        if my_is_numeric(prevamt[0]):
+            prevnum = float(prevamt[0])
+            amtsplit = amt.split(' ')
+            if my_is_numeric(amtsplit[0]):
+                prevnum = prevnum + float(amtsplit[0])
+                amt = f"{prevnum} {' '.join(prevamt[1:])}"
+    return amt
 
 def generate_recipe(url):
     r = Recipe
@@ -818,8 +796,8 @@ def RecipeDaddy():
             remy(r)
 
         elif choice == '3':
-            transformRecipe(r)
-
+            r = transformRecipe(r)
+            remy(r)
         else:
             print('Hmm I do not understand what you want me to do')
     
@@ -1066,8 +1044,8 @@ def scaleTransform(r, scale):
     n = float(scale)
     ing = rec.ingredients
     newdict = {}
-    for i,k in ing:
-        if i in alcohol or spices:
+    for i,k in ing.items():
+        if i in ALCOHOL or i in SPICES:
             prevamt = k.split(' ')
             if my_is_numeric(prevamt[0]):
                 prevnum = float(prevamt[0])
@@ -1091,11 +1069,6 @@ def scaleTransform(r, scale):
                 newdict[i] = k
     rec.ingredients = newdict
     return rec
-
-
-
-    
-    return r
 
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
     
@@ -1122,8 +1095,9 @@ def transformRecipe(r):
         r = scaleTransform(r, input())
 
     print("Recipe transformed " + choiceToTransformation[choice])
+    return r
 
 #rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
 #rec.printinfo(rec)
-# RecipeDaddy()
+RecipeDaddy()
