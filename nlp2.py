@@ -314,7 +314,8 @@ LACTOSE_SUBSTITUTIONS = {
     "half-and-half": ["coconut cream", "soy cream", "almond cream"],
     "ghee": ["coconut oil", "olive oil", "canola oil", "sunflower oil", "vegetable oil", "avocado oil"],
     "casein": ["soy protein", "pea protein", "hemp protein", "rice protein"],
-    "lactose": ["glucose syrup", "maple syrup", "corn syrup", "dextrose", "maltodextrin"]
+    "lactose": ["glucose syrup", "maple syrup", "corn syrup", "dextrose", "maltodextrin"],
+    "heavy cream": ["lactose free cream"]
 }
 
 GLUTEN_SUBSTITUTIONS =  {
