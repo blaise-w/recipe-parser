@@ -404,6 +404,51 @@ SUBSTITIONS = {
     'yellow mustard': ['dijon mustard', 'whole grain mustard']
 }
 
+alcohol = [
+    "rum", 
+    "vodka", 
+    "tequila", 
+    "whiskey", 
+    "gin", 
+    "brandy", 
+    "wine", 
+    "beer", 
+    "champagne",
+    "Scotch",
+    "Bourbon",
+    "Rye whiskey",
+    "Sake",
+    "Cognac",
+    "Vermouth",
+    "Amaretto",
+    "Kahlua",
+    "Bailey's Irish Cream",
+    "Limoncello"
+]
+
+spices = [
+    "cinnamon", 
+    "ginger", 
+    "cardamom", 
+    "cloves", 
+    "nutmeg", 
+    "coriander", 
+    "cumin", 
+    "turmeric", 
+    "black pepper", 
+    "cayenne pepper",
+    "allspice",
+    "anise",
+    "bay leaves",
+    "caraway seeds",
+    "chili powder",
+    "curry powder",
+    "fennel seeds",
+    "garlic powder",
+    "mustard seeds",
+    "paprika"
+]
+
 stopwords = ['making','is','do', 'be', 'c', 'f']
 
 class Recipe:
@@ -1087,6 +1132,42 @@ def glutenFree(r):
 # size up pot/pan
 # if you cannot increase pot/pan, multiply cooking time by 1.1h
 def scaleTransform(r, scale):
+    rec = r
+    if not my_is_numeric(scale):
+        print('You did not enter a number.')
+        return
+    n = float(scale)
+    ing = rec.ingredients
+    newdict = {}
+    for i,k in ing:
+        if i in alcohol or spices:
+            prevamt = k.split(' ')
+            if my_is_numeric(prevamt[0]):
+                prevnum = float(prevamt[0])
+                newnum = prevnum
+                if n>1.25:
+                    newnum = prevnum*n*0.8
+                elif n<=0.6:
+                    newnum = prevnum*n*1.5
+                val = f"{newnum} {' '.join(prevamt[1:])}"
+                newdict[i] = val
+            else:
+                newdict[i] = k
+        else:
+            prevamt = k.split(' ')
+            if my_is_numeric(prevamt[0]):
+                prevnum = float(prevamt[0])
+                newnum = prevnum*n
+                val = f"{newnum} {' '.join(prevamt[1:])}"
+                newdict[i] = val
+            else:
+                newdict[i] = k
+    rec.ingredients = newdict
+    return rec
+
+
+
+    
     return r
 
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
@@ -1118,4 +1199,4 @@ def transformRecipe(r):
 #rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
 #rec.printinfo(rec)
-RecipeDaddy()
+# RecipeDaddy()
