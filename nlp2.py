@@ -262,22 +262,52 @@ MEXICAN_SUBSTITUTIONS = {
 }
 
 LACTOSE_SUBSTITUTIONS = {
-    "Milk": ["Almond milk", "Coconut milk", "Soy milk", "Oat milk", "Rice milk", "Hemp milk", "Cashew milk"],
-    "Butter": ["Vegan butter", "Coconut oil", "Olive oil", "Canola oil", "Sunflower oil", "Vegetable oil", "Avocado oil"],
-    "Cheese": ["Vegan cheese", "Nutritional yeast", "Tofu", "Cashew cheese", "Coconut cheese", "Soy cheese"],
-    "Cream": ["Coconut cream", "Soy cream", "Almond cream", "Cashew cream"],
-    "Sour cream": ["Coconut cream", "Soy cream", "Almond cream"],
-    "Yogurt": ["Soy yogurt", "Almond yogurt", "Coconut yogurt"],
-    "Whey protein": ["Soy protein", "Pea protein", "Hemp protein", "Rice protein"],
-    "Cream cheese": ["Vegan cream cheese", "Tofu cream cheese", "Cashew cream cheese"],
-    "Ice cream": ["Non-dairy ice cream", "Soy ice cream", "Coconut ice cream", "Almond ice cream"],
-    "Condensed milk": ["Coconut condensed milk", "Soy condensed milk", "Almond condensed milk"],
-    "Evaporated milk": ["Coconut milk", "Soy milk", "Almond milk"],
-    "Whipped cream": ["Coconut whipped cream", "Soy whipped cream", "Cashew whipped cream"],
-    "Half-and-half": ["Coconut cream", "Soy cream", "Almond cream"],
-    "Ghee": ["Coconut oil", "Olive oil", "Canola oil", "Sunflower oil", "Vegetable oil", "Avocado oil"],
-    "Casein": ["Soy protein", "Pea protein", "Hemp protein", "Rice protein"],
-    "Lactose": ["Glucose syrup", "Maple syrup", "Corn syrup", "Dextrose", "Maltodextrin"]
+    "milk": ["almond milk", "coconut milk", "soy milk", "oat milk", "rice milk", "hemp milk", "cashew milk"],
+    "butter": ["vegan butter", "coconut oil", "olive oil", "canola oil", "sunflower oil", "vegetable oil", "avocado oil"],
+    "cheese": ["vegan cheese", "nutritional yeast", "tofu", "cashew cheese", "coconut cheese", "soy cheese"],
+    "cream": ["coconut cream", "soy cream", "almond cream", "cashew cream"],
+    "sour cream": ["coconut cream", "soy cream", "almond cream"],
+    "yogurt": ["soy yogurt", "almond yogurt", "coconut yogurt"],
+    "whey protein": ["soy protein", "pea protein", "hemp protein", "rice protein"],
+    "cream cheese": ["vegan cream cheese", "tofu cream cheese", "cashew cream cheese"],
+    "ice cream": ["non-dairy ice cream", "soy ice cream", "coconut ice cream", "almond ice cream"],
+    "condensed milk": ["coconut condensed milk", "soy condensed milk", "almond condensed milk"],
+    "evaporated milk": ["coconut milk", "soy milk", "almond milk"],
+    "whipped cream": ["coconut whipped cream", "soy whipped cream", "cashew whipped cream"],
+    "half-and-half": ["coconut cream", "soy cream", "almond cream"],
+    "ghee": ["coconut oil", "olive oil", "canola oil", "sunflower oil", "vegetable oil", "avocado oil"],
+    "casein": ["soy protein", "pea protein", "hemp protein", "rice protein"],
+    "lactose": ["glucose syrup", "maple syrup", "corn syrup", "dextrose", "maltodextrin"]
+}
+
+GLUTEN_SUBSTITUTIONS =  {
+    "flour": ["rice flour", "almond flour", "coconut flour", "potato flour", "tapioca flour", "corn flour", "chickpea flour"],
+    "breadcrumbs": ["gluten-free breadcrumbs", "cornmeal", "crushed rice cakes"],
+    "soy sauce": ["tamari sauce", "coconut aminos"],
+    "pasta": ["gluten-free pasta", "zucchini noodles", "spaghetti squash", "rice noodles"],
+    "bread": ["gluten-free bread", "rice bread", "cornbread", "potato bread"],
+    "crackers": ["rice crackers", "corn crackers", "nut crackers"],
+    "oats": ["gluten-free oats"],
+    "beer": ["gluten-free beer"],
+    "breading": ["gluten-free breading", "cornmeal", "almond flour"],
+    "cake mix": ["gluten-free cake mix"],
+    "pizza crust": ["gluten-free pizza crust", "cauliflower crust"],
+    "tortillas": ["corn tortillas", "gluten-free tortillas"],
+    "wheat flour": ["rice flour", "potato flour", "tapioca flour", "corn flour"],
+    "breadcrumbs": ["gluten-free breadcrumbs", "crushed rice cakes"],
+    "croutons": ["gluten-free croutons", "toasted nuts"],
+    "roux": ["cornstarch", "potato starch"],
+    "soba noodles": ["gluten-free soba noodles"],
+    "malt vinegar": ["apple cider vinegar"],
+    "spelt flour": ["almond flour", "coconut flour"],
+    "couscous": ["quinoa", "rice"],
+    "wheat pasta": ["gluten-free pasta"],
+    "semolina": ["cornmeal"],
+    "durum wheat flour": ["rice flour", "corn flour"],
+    "bulgur": ["quinoa", "rice"],
+    "farro": ["quinoa", "rice"],
+    "rye flour": ["amaranth flour", "buckwheat flour"],
+    "barley flour": ["almond flour", "coconut flour"]
 }
 
 
@@ -936,12 +966,16 @@ def unhealthyTransform(r):
                     else:
                         if my_is_numeric(values[0]):
                             if values[0] == '1': pluralize = True
-                            r.ingredients[i] = str(2*float(values[0]))
+                            temp = 2*float(values[0])
+                            if temp % 1: r.ingredients[i] = str(temp)
+                            else: r.ingredients[i] = str(int(temp))
                             for v in values[1:]:
                                 r.ingredients[i] = r.ingredients[i] + " " + v
                             if pluralize: r.ingredients[i] = r.ingredients[i] + "s"
                 elif len(values) == 1 and my_is_numeric(values[0]):
-                    r.ingredients[i] = 2*float(val)
+                    temp = 2*float(val)
+                    if temp % 1: r.ingredients[i] = str(temp)
+                    else: r.ingredients[i] = str(int(temp))
                 elif "lightly" in val:
                     r.ingredients[i] = re.sub("lightly", "generously", val)
 
@@ -952,12 +986,16 @@ def unhealthyTransform(r):
                     depluralize = False
                     if my_is_numeric(values[0]):
                         if float(values[0]) == 2.0: depluralize = True
-                        r.ingredients[i] = str(0.5*float(values[0]))
+                        temp = 0.5*float(values[0])
+                        if temp % 1: r.ingredients[i] = str(temp)
+                        else: r.ingredients[i] = str(int(temp))
                         for v in values[1:]:
                             r.ingredients[i] = r.ingredients[i] + " " + v
                         if depluralize: r.ingredients[i] = r.ingredients[i][:-1]
                 elif len(values) == 1 and my_is_numeric(values[0]):
-                    r.ingredients[i] = 0.5*float(val)
+                    temp = 0.5*float(val)
+                    if temp % 1: r.ingredients[i] = str(temp)
+                    else: r.ingredients[i] = str(int(temp))
 
     return r
 
@@ -973,12 +1011,16 @@ def healthyTransform(r):
                     else:
                         if my_is_numeric(values[0]):
                             if float(values[0]) == 2.0: depluralize = True
-                            r.ingredients[i] = str(0.5*float(values[0]))
+                            temp = 0.5*float(values[0])
+                            if temp % 1: r.ingredients[i] = str(temp)         
+                            else: r.ingredients[i] = str(int(temp))                           
                             for v in values[1:]:
                                 r.ingredients[i] = r.ingredients[i] + " " + v
                             if depluralize: r.ingredients[i] = r.ingredients[i][:-1]
                 elif len(values) == 1 and my_is_numeric(values[0]):
-                    r.ingredients[i] = 0.5*float(val)
+                    temp = 0.5*float(val)
+                    if temp % 1: r.ingredients[i] = str(temp)                       
+                    else: r.ingredients[i] = str(int(temp))                        
                 elif "generously" in val:
                     r.ingredients[i] = re.sub("generously", "lightly", val)
 
@@ -989,16 +1031,20 @@ def healthyTransform(r):
                     pluralize = False
                     if my_is_numeric(values[0]):
                         if values[0] == '1': pluralize = True
-                        r.ingredients[i] = str(2*float(values[0]))
+                        temp = 2*float(values[0])
+                        if temp % 1: r.ingredients[i] = str(temp)                          
+                        else: r.ingredients[i] = str(int(temp))                           
                         for v in values[1:]:
                             r.ingredients[i] = r.ingredients[i] + " " + v
                         if pluralize: r.ingredients[i] = r.ingredients[i] + "s"
                 elif len(values) == 1 and my_is_numeric(values[0]):
-                    r.ingredients[i] = 2*float(val)
+                    temp = 2*float(val)
+                    if temp % 1: r.ingredients[i] = str(temp)                        
+                    else: r.ingredients[i] = str(int(temp))                       
 
     return r
 
-def lactoseFree(r): # needs to work for two words e.g. "condensed milk"
+def lactoseFree(r):
     ingreds = list(r.ingredients.keys())
     changed_ingredients = {}
     milk_change = []
@@ -1029,6 +1075,33 @@ def lactoseFree(r): # needs to work for two words e.g. "condensed milk"
     return r 
 
 def glutenFree(r):
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    glut_change = []
+    sub = {}
+    for i in ingreds:
+        if i in GLUTEN_SUBSTITUTIONS.keys():
+            name = GLUTEN_SUBSTITUTIONS[i]
+            print('Found the following substitutions for',i)
+            print(name)
+            c = input('Which would you like to use? ')
+            changed_ingredients[c] = r.ingredients[i]
+            glut_change.append(i)
+            sub[i] = c
+        else:
+            changed_ingredients[i] = r.ingredients[i]
+
+    steps = r.steps
+    newsteps = []
+    for i in steps:
+        curr = i
+        for ing in glut_change:
+            if ing in i:
+                veg = sub[ing]
+                curr = i.lower().replace(ing,veg)
+        newsteps.append(curr)
+    r.ingredients = changed_ingredients
+    r.steps = newsteps
     return r
 
 # doubling a recipe:
