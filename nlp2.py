@@ -729,8 +729,7 @@ def minihelper(ingred,amount,dic):
 
 def generate_recipe(url):
     r = Recipe
-    text = scrape(url) #https://www.allrecipes.com/recipe/11691/tomato-and-garlic-pasta/
-    #https://www.allrecipes.com/recipe/16354/easy-meatloaf/
+    text = scrape(url) 
     Recipe.organizeInfo(r, text)
     return r
 
@@ -1224,8 +1223,6 @@ def scaleTransform(r, scale):
     rec.ingredients = newdict
     return rec
 
-
-
 choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to a different cuisine', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
     
 def transformRecipe(r):
@@ -1255,7 +1252,11 @@ def transformRecipe(r):
         print("Recipe transformed " + choiceToTransformation[choice])
     return r
 
-#rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
-#rec = nonvegTransform(rec)
-#rec.printinfo(rec)
 RecipeDaddy()
+# https://www.allrecipes.com/recipe/24074/alysias-basic-meat-lasagna/
+# https://www.allrecipes.com/recipe/244716/shirataki-meatless-meat-pad-thai/
+# https://www.allrecipes.com/recipe/16167/beef-bourguignon-i/
+# https://www.allrecipes.com/recipe/228285/teriyaki-salmon/
+# https://www.allrecipes.com/recipe/7757/tiramisu-cheesecake/
+# https://www.allrecipes.com/recipe/73303/mexican-rice-iii/
+# https://www.allrecipes.com/recipe/16354/easy-meatloaf/
