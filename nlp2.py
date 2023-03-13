@@ -537,7 +537,7 @@ def ingredientHelper(lststr):
             '\u215B': 0.125,}.get(x.group(), x.group())), i)
         
         pattern1 = re.compile(r'\d+\s\((.*)\) \w+ (.*)') #parentheses in ingredient
-        pattern2 = re.compile(r'(\d+)  (.*)') #double space
+        pattern2 = re.compile(r'(\d+|\d+\.\d+)  (.*)') #double space
         pattern3 = re.compile(r'(.*) (to\staste)') #to taste
         pattern4 = re.compile(r'(\d+ \w+) (.*)') #normal format
         pattern5 = re.compile(r'(\d+\.\d+ \w+) (.*)') #decimal
@@ -549,6 +549,8 @@ def ingredientHelper(lststr):
         match5 = pattern5.match(i)
         match6 = pattern6.match(i)
         if match1:
+            ing = match1.group(2)
+            amt = match1.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -561,7 +563,6 @@ def ingredientHelper(lststr):
                         amt = f"{prevnum} {' '.join(prevamt[1:])}"
             outdict[ing] = amt
         elif match2:
-            print('d')
             ing = match2.group(2)
             amt = match2.group(1)
             if found:
@@ -587,6 +588,8 @@ def ingredientHelper(lststr):
             else:
                 outdict[item] = q
         elif match4:
+            ing = match4.group(2)
+            amt = match4.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -599,6 +602,8 @@ def ingredientHelper(lststr):
                         amt = f"{prevnum} {' '.join(prevamt[1:])}"
             outdict[ing] = amt
         elif match5:
+            ing = match5.group(2)
+            amt = match5.group(1)
             if found:
                 ing = rep
             if ing in outdict:
@@ -617,6 +622,8 @@ def ingredientHelper(lststr):
             # Combine the total with the rest of the string
             i = f"{total} {' '.join(parts[2:])}"
             newmatch = pattern5.match(i)
+            ing = newmatch.group(2)
+            amt = newmatch.group(1)
             if found:
                 ing = rep
             if ing in outdict:
