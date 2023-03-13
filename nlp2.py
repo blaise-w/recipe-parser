@@ -233,32 +233,69 @@ HEALTHY_LIST = {"tomato", "mushroom", "carrot", "bay leaf", "spinach", "kale", "
 
 
 MEXICAN_SUBSTITUTIONS = {
-    "Butter": ["Lard"],
-    "Sugar": ["Piloncillo", "honey", "agave nectar"],
-    "White flour": ["Masa harina", "all-purpose flour"],
-    "Sour cream": ["Crema Mexicana"],
-    "Heavy cream": ["Crema Mexicana", "evaporated milk"],
-    "Cream cheese": ["Queso fresco"],
-    "Mayonnaise": ["Sour cream"],
-    "Breadcrumbs": ["Tortilla chips", "cornmeal"],
-    "White rice": ["Spanish rice", "Mexican-style rice"],
-    "Potatoes": ["Sweet potatoes", "yuca"],
-    "Pasta": ["Nopales", "rice noodles"],
-    "Milk": ["Evaporated milk"],
-    "Cheese": ["Queso fresco", "Cotija cheese", "Oaxaca cheese"],
-    "Beef": ["Carne asada", "ground beef"],
-    "Pork": ["Carnitas", "chorizo"],
-    "Chicken": ["Pollo asado", "shredded chicken"],
-    "Lamb": ["Barbacoa"],
-    "Fish": ["Tilapia", "red snapper"],
-    "Shrimp": ["Camarones al ajillo"],
-    "Bacon": ["Chorizo"],
-    "Sausage": ["Chorizo"],
-    "Hot dogs": ["Chorizo"],
-    "Ground beef": ["Picadillo"],
-    "Eggs": ["Huevos rancheros"],
-    "Canola oil": ["Lard", "vegetable oil"],
-    "Salt": ["Sea salt", "pink Himalayan salt", "cilantro", "cumin"]
+    "butter": ["lard"],
+    "sugar": ["piloncillo", "honey", "agave nectar"],
+    "white flour": ["masa harina", "all-purpose flour"],
+    "sour cream": ["crema mexicana"],
+    "heavy cream": ["crema mexicana", "evaporated milk"],
+    "cream cheese": ["queso fresco"],
+    "mayonnaise": ["sour cream"],
+    "breadcrumbs": ["tortilla chips", "cornmeal"],
+    "white rice": ["spanish rice", "mexican-style rice"],
+    "potatoes": ["sweet potatoes", "yuca"],
+    "pasta": ["nopales", "rice noodles"],
+    "milk": ["evaporated milk"],
+    "cheese": ["queso fresco", "cotija cheese", "oaxaca cheese"],
+    "mozzarella cheese": ["queso fresco", "cotija cheese", "oaxaca cheese"],
+    "shredded provolone cheese": ["queso fresco", "cotija cheese", "oaxaca cheese"],
+    "ricotta cheese": ["queso fresco", "cotija cheese", "oaxaca cheese"],
+    "beef": ["carne asada", "ground beef", "chorizo"],
+    "pork": ["carnitas", "chorizo"],
+    "chicken": ["pollo asado", "shredded chicken"],
+    "lamb": ["barbacoa"],
+    "fish": ["tilapia", "red snapper"],
+    "shrimp": ["camarones al ajillo"],
+    "bacon": ["chorizo"],
+    "sausage": ["chorizo"],
+    "hot dogs": ["chorizo"],
+    "ground beef": ["picadillo"],
+    "eggs": ["huevos rancheros"],
+    "canola oil": ["lard", "vegetable oil"],
+    "salt": ["sea salt", "pink himalayan salt", "cilantro", "cumin"],
+    "tomato": ["tomatillo"]
+}
+
+ITALIAN_SUBSTITUTIONS = {
+    "butter": ["olive oil"],
+    "sugar": ["honey"],
+    "white flour": ["semolina flour"],
+    "sour cream": ["yogurt"],
+    "heavy cream": ["whole milk"],
+    "cream cheese": ["ricotta cheese"],
+    "mayonnaise": ["olive oil", "yogurt"],
+    "breadcrumbs": ["panko breadcrumbs", "grated parmesan cheese"],
+    "white rice": ["arborio rice"],
+    "potatoes": ["polenta", "fava beans"],
+    "pasta": ["risotto rice", "polenta"],
+    "milk": ["cream"],
+    "cheese": ["parmesan cheese", "pecorino romano cheese", "mozzarella cheese"],
+    "mozzarella cheese": ["fontina cheese", "provolone cheese"],
+    "shredded provolone cheese": ["mozzarella cheese", "fontina cheese"],
+    "ricotta cheese": ["cottage cheese", "cream cheese"],
+    "beef": ["veal", "pork"],
+    "pork": ["sausage", "pancetta"],
+    "chicken": ["turkey", "veal"],
+    "lamb": ["goat"],
+    "fish": ["clams", "mussels", "calamari"],
+    "shrimp": ["scallops"],
+    "bacon": ["pancetta"],
+    "sausage": ["prosciutto", "pancetta"],
+    "hot dogs": ["sausage"],
+    "ground beef": ["ground pork", "ground veal"],
+    "eggs": ["frittata"],
+    "canola oil": ["olive oil"],
+    "salt": ["sea salt", "rosemary", "oregano", "basil"],
+    "tomato": ["sun-dried tomato", "roasted red pepper"]
 }
 
 LACTOSE_SUBSTITUTIONS = {
@@ -946,9 +983,12 @@ def nonvegTransform(rec):
     for i in ingreds:
         if i in VEGETARIAN_INGREDIENTS:
             name = NON_VEGETARIAN_SUBSTITUTIONS[i]
-            print('Found the following substitutions for',i)
-            print(name)
-            c = input('Which would you like to use? ')
+            if len(name)>1:
+                print('Found the following substitutions for',i)
+                print(name)
+                c = input('Which would you like to use? ')
+            else:
+                c = name[0]
             changed_ingredients[c] = r.ingredients[i]
             meat_change.append(i)
             sub[i] = c
@@ -1074,9 +1114,12 @@ def lactoseFree(r):
     for i in ingreds:
         if i in LACTOSE_SUBSTITUTIONS.keys():
             name = LACTOSE_SUBSTITUTIONS[i]
-            print('Found the following substitutions for',i)
-            print(name)
-            c = input('Which would you like to use? ')
+            if len(name)>1:
+                print('Found the following substitutions for',i)
+                print(name)
+                c = input('Which would you like to use? ')
+            else:
+                c = name[0]
             changed_ingredients[c] = r.ingredients[i]
             milk_change.append(i)
             sub[i] = c
@@ -1104,9 +1147,12 @@ def glutenFree(r):
     for i in ingreds:
         if i in GLUTEN_SUBSTITUTIONS.keys():
             name = GLUTEN_SUBSTITUTIONS[i]
-            print('Found the following substitutions for',i)
-            print(name)
-            c = input('Which would you like to use? ')
+            if len(name)>1:
+                print('Found the following substitutions for',i)
+                print(name)
+                c = input('Which would you like to use? ')
+            else:
+                c = name[0]
             changed_ingredients[c] = r.ingredients[i]
             glut_change.append(i)
             sub[i] = c
@@ -1126,11 +1172,48 @@ def glutenFree(r):
     r.steps = newsteps
     return r
 
+cuisineToMessage = {'1' : "Mexican", '2' : "Italian"}
+
+def cuisineTransform(r, cuisine):
+    if cuisine == '1': dic = MEXICAN_SUBSTITUTIONS
+    elif cuisine == '2': dic = ITALIAN_SUBSTITUTIONS
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    mex_change = []
+    sub = {}
+    for i in ingreds:
+        if i in dic.keys():
+            name = dic[i]
+            if len(name)>1:
+                print('Found the following substitutions for',i)
+                print(name)
+                c = input('Which would you like to use? ')
+            else:
+                c = name[0]
+            changed_ingredients[c] = r.ingredients[i]
+            mex_change.append(i)
+            sub[i] = c
+        else:
+            changed_ingredients[i] = r.ingredients[i]
+
+    steps = r.steps
+    newsteps = []
+    for i in steps:
+        curr = i
+        for ing in mex_change:
+            if ing in i:
+                veg = sub[ing]
+                curr = i.lower().replace(ing,veg)
+        newsteps.append(curr)
+    r.ingredients = changed_ingredients
+    r.steps = newsteps
+    print("Recipe transformed to " + cuisineToMessage[cuisine])
+    return r
+
 # doubling a recipe:
 # multiply base ingredients by 2
 # multiply spices and alcohols by 1.5
 # size up pot/pan
-# if you cannot increase pot/pan, multiply cooking time by 1.1h
 def scaleTransform(r, scale):
     rec = r
     if not my_is_numeric(scale):
@@ -1167,13 +1250,10 @@ def scaleTransform(r, scale):
 
 
 
-    
-    return r
-
-choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to Mexican', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
+choiceToTransformation = {'1' : 'to vegetarian', '2' : 'from vegetarian', '3' : 'to healthy', '4' : 'to unhealthy', '5' : 'to a different cuisine', '6' : 'to Lactose-free', '7' : 'to Gluten-free', '8' : 'to your scale'}
     
 def transformRecipe(r):
-    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to Mexican, [6] Lactose-free, [7] Gluten-free, [8] scale")
+    print("How would you like to transform this recipe? [1] to vegetarian, [2] from vegetarian, [3] to healthy, [4] to unhealthy, [5] to a different cuisine, [6] Lactose-free, [7] Gluten-free, [8] scale")
     choice = input()
 
     if choice == '1':
@@ -1185,7 +1265,8 @@ def transformRecipe(r):
     elif choice == '4':
         r = unhealthyTransform(r)
     elif choice == '5':
-        pass
+        print("What type of cuisine would you like? [1] Mexican [2] Italian")
+        r = cuisineTransform(r, input())
     elif choice == '6':
         r = lactoseFree(r)
     elif choice == '7':
@@ -1194,9 +1275,10 @@ def transformRecipe(r):
         print("How much would you like to scale the recipe by?")
         r = scaleTransform(r, input())
 
-    print("Recipe transformed " + choiceToTransformation[choice])
+    if choice != '5':
+        print("Recipe transformed " + choiceToTransformation[choice])
 
 #rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
 #rec.printinfo(rec)
-# RecipeDaddy()
+RecipeDaddy()
