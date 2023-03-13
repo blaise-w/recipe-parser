@@ -281,7 +281,6 @@ LACTOSE_SUBSTITUTIONS = {
 }
 
 
-
 GENERAL_INGREDIENTS1 = ["beef chuck roast", "beef broth", "garlic powder", "black peppercorn", "peppercorn", "jalapeno pepper",
     "beef", "pork", "lamb", "chicken", "turkey", "duck", "salmon", "chicken bouillon",
     "cod", "tuna", "shrimp", "crab", "lobster", "tofu", "tempeh", "chicken broth",
@@ -1021,8 +1020,35 @@ def healthyTransform(r):
 
     return r
 
-def lactoseFree(r):
-    return r
+def lactoseFree(r): # needs to work for two words e.g. "condensed milk"
+    ingreds = list(r.ingredients.keys())
+    changed_ingredients = {}
+    milk_change = []
+    sub = {}
+    for i in ingreds:
+        if i in LACTOSE_SUBSTITUTIONS.keys():
+            name = LACTOSE_SUBSTITUTIONS[i]
+            print('Found the following substitutions for',i)
+            print(name)
+            c = input('Which would you like to use? ')
+            changed_ingredients[c] = r.ingredients[i]
+            milk_change.append(i)
+            sub[i] = c
+        else:
+            changed_ingredients[i] = r.ingredients[i]
+
+    steps = r.steps
+    newsteps = []
+    for i in steps:
+        curr = i
+        for ing in milk_change:
+            if ing in i:
+                veg = sub[ing]
+                curr = i.lower().replace(ing,veg)
+        newsteps.append(curr)
+    r.ingredients = changed_ingredients
+    r.steps = newsteps
+    return r 
 
 def glutenFree(r):
     return r
@@ -1097,7 +1123,7 @@ def transformRecipe(r):
 
     print("Recipe transformed " + choiceToTransformation[choice])
 
-rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
+#rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
-rec.printinfo(rec)
+#rec.printinfo(rec)
 # RecipeDaddy()
