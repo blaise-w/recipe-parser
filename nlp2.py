@@ -864,7 +864,6 @@ def RecipeDaddy():
 
         elif choice == '3':
             r = transformRecipe(r)
-            remy(r)
         else:
             print('Hmm I do not understand what you want me to do')
     
@@ -1173,7 +1172,6 @@ def cuisineTransform(r, cuisine):
             sub[i] = c
         else:
             changed_ingredients[i] = r.ingredients[i]
-
     steps = r.steps
     newsteps = []
     for i in steps:
@@ -1253,7 +1251,9 @@ def transformRecipe(r):
         print("How much would you like to scale the recipe by?")
         r = scaleTransform(r, input())
 
-    print("Recipe transformed " + choiceToTransformation[choice])
+    if choice != '5':
+        print("Recipe transformed " + choiceToTransformation[choice])
+    return r
 
 #rec = generate_recipe('https://www.allrecipes.com/recipe/73303/mexican-rice-iii/')
 #rec = nonvegTransform(rec)
